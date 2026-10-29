@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F8FAFC;font-family:'IBM Plex Sans Thai',sans-serif;color:#0F172A}a{color:#0D9488}a:hover{color:#0F766E}*{box-sizing:border-box}input,select,textarea,button{font-family:inherit}</style>
+</helmet>
+<div style="--p:{{ th.p }};--pd:{{ th.pd }};--pl:{{ th.pl }};--pl2:{{ th.pl2 }};--pb:{{ th.pb }};display:flex;min-height:100vh;background:#F8FAFC;font-size:14px;line-height:1.5">
+
+<!-- SIDEBAR -->
+<aside style="width:{{ sideW }};flex:none;background:#fff;border-right:1px solid #E2E8F0;display:{{ chromeDisplay }};flex-direction:column;position:sticky;top:0;height:100vh">
+  <div style="padding:20px 20px 16px;display:flex;gap:12px;align-items:center">
+    <div style="width:38px;height:38px;border-radius:10px;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px">กบ</div>
+    <div><div style="font-weight:600;font-size:15px;line-height:1.2">ระบบสารบรรณ</div><div style="font-size:12px;color:#64748B">ฝ่ายการเงินและบัญชี · THAMC</div></div>
+  </div>
+  <nav style="padding:8px 12px;display:flex;flex-direction:column;gap:2px;flex:1;overflow:auto">
+    <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+      <div onClick="{{ n.go }}" style="display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:8px;cursor:pointer;background:{{ n.bg }};color:{{ n.fg }};font-weight:{{ n.fw }}" style-hover="background:#F1F5F9">
+        <span style="width:20px;text-align:center;font-size:16px">{{ n.icon }}</span><span style="flex:1">{{ n.label }}</span>
+        <sc-if value="{{ n.hasCount }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;background:{{ n.cbg }};color:{{ n.cfg }};padding:1px 8px;border-radius:99px;font-weight:600">{{ n.count }}</span></sc-if>
+      </div>
+    </sc-for>
+  </nav>
+  <div style="padding:16px;border-top:1px solid #E2E8F0;display:flex;gap:10px;align-items:center">
+    <div style="width:34px;height:34px;border-radius:99px;background:#9333EA;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600">ส</div>
+    <div style="flex:1"><div style="font-weight:500">สาริณี</div><div style="font-size:12px;color:#64748B">เจ้าหน้าที่สารบรรณ</div></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main style="flex:1;min-width:0;display:flex;flex-direction:column">
+  <header style="display:{{ chromeDisplay }};flex-wrap:wrap;align-items:center;gap:12px 16px;padding:14px 28px;background:#fff;border-bottom:1px solid #E2E8F0;position:sticky;top:0;z-index:5">
+    <div style="flex:1 1 240px;min-width:220px"><div style="font-size:12px;color:#64748B">วันที่ 29 ตุลาคม 2569 · ปีงบประมาณ 2570</div><div style="font-size:20px;font-weight:600">{{ title }}</div></div>
+    <div style="display:{{ yrShow }};align-items:center;border:1px solid #CBD5E1;border-radius:10px;background:#fff;overflow:hidden;height:40px">
+      <button onClick="{{ modeFy }}" title="ปีงบประมาณ 1 ต.ค. – 30 ก.ย." style="height:100%;padding:0 12px;border:0;cursor:pointer;font-size:13px;background:{{ fyBg }};color:{{ fyFg }}">ปีงบประมาณ</button>
+      <button onClick="{{ modeCal }}" title="ปีปฏิทิน 1 ม.ค. – 31 ธ.ค." style="height:100%;padding:0 12px;border:0;cursor:pointer;font-size:13px;background:{{ calBg }};color:{{ calFg }}">ปีปฏิทิน</button>
+      <select value="{{ yr }}" onChange="{{ setYr }}" style="height:100%;border:0;border-left:1px solid #CBD5E1;padding:0 10px;background:#fff;font-size:13px;outline:none"><sc-for list="{{ yrOpts }}" as="o" hint-placeholder-count="3"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+    </div>
+    <input placeholder="ค้นหาเลขที่ / เรื่อง / หน่วยงาน…" value="{{ q }}" onChange="{{ setQ }}" style="flex:1 1 200px;max-width:300px;min-width:0;padding:9px 14px;border:1px solid #CBD5E1;border-radius:8px;font-size:14px;background:#F8FAFC;outline:none">
+    <button onClick="{{ openTheme }}" title="เลือกธีมสี" aria-label="เลือกธีมสี" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid #CBD5E1;background:#fff;color:#475569;border-radius:10px;cursor:pointer" style-hover="background:#F1F5F9"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1"></circle><circle cx="17.5" cy="10.5" r="1"></circle><circle cx="8.5" cy="7.5" r="1"></circle><circle cx="6.5" cy="12.5" r="1"></circle><path d="M12 2a10 10 0 1 0 0 20c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1.1.9-2 2-2H18a4 4 0 0 0 4-4c0-5.5-4.5-9.4-10-9.4z"></path></svg></button>
+    <button onClick="{{ openIn }}" title="รับหนังสือเข้า" aria-label="รับหนังสือเข้า" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid var(--p);background:#fff;color:var(--p);border-radius:10px;cursor:pointer" style-hover="background:var(--pl)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.5 5.1 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.7 4H7.2a2 2 0 0 0-1.7 1.1z"></path></svg></button>
+    <button onClick="{{ openOut }}" title="ออกเลข กบ." aria-label="ออกเลข กบ." style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border:0;background:var(--p);color:#fff;border-radius:10px;cursor:pointer" style-hover="background:var(--pd)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg></button>
+  </header>
+
+  <div style="padding:24px 28px 48px;display:flex;flex-direction:column;gap:20px">
+
+  <!-- DASHBOARD -->
+  <sc-if value="{{ isDash }}" hint-placeholder-val="{{ true }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+      <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+        <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:18px 20px;border-top:3px solid {{ k.c }}">
+          <div style="color:#64748B;font-size:13px">{{ k.l }}</div>
+          <div style="font-size:32px;font-weight:700;line-height:1.2;margin-top:4px">{{ k.v }}</div>
+          <div style="font-size:12px;color:#64748B;margin-top:2px">{{ k.s }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px">
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:20px">
+        <div style="font-weight:600;font-size:16px">เรื่องที่ออกเลข จำแนกตามหมวดเรื่อง</div>
+        <div style="font-size:12px;color:#64748B;margin:2px 0 16px">การจัดซื้อยาผ่าน EGP เป็นหมวดที่ออกเลขมากที่สุดในข้อมูลที่แสดง</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ catBars }}" as="b" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:150px 1fr 32px;align-items:center;gap:10px"><span style="font-size:13px">{{ b.l }}</span><div style="background:#F1F5F9;border-radius:99px;height:12px"><div style="width:{{ b.w }};background:{{ b.c }};height:12px;border-radius:99px"></div></div><span style="font-weight:600;text-align:right">{{ b.n }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:20px">
+        <div style="font-weight:600;font-size:16px">หนังสือรับเข้า จำแนกตามหน่วยงานต้นเรื่อง</div>
+        <div style="font-size:12px;color:#64748B;margin:2px 0 16px">รพธ. และสนับสนุนทั่วไปส่งเรื่องเข้าบ่อยที่สุด</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ orgBars }}" as="b" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:150px 1fr 32px;align-items:center;gap:10px"><span style="font-size:13px">{{ b.l }}</span><div style="background:#F1F5F9;border-radius:99px;height:12px"><div style="width:{{ b.w }};background:{{ b.c }};height:12px;border-radius:99px"></div></div><span style="font-weight:600;text-align:right">{{ b.n }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px">
+      <div style="display:{{ stDisp }};background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:20px">
+        <div style="font-weight:600;font-size:16px">ต้องติดตาม</div>
+        <div style="font-size:12px;color:#64748B;margin:2px 0 12px">เรื่องที่ส่งคืนแก้ไข รอลงนาม หรือยังไม่มีผู้รับผิดชอบ</div>
+        <sc-for list="{{ followUps }}" as="f" hint-placeholder-count="4">
+          <div onClick="{{ f.open }}" style="display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid #F1F5F9;cursor:pointer"><span style="font-family:ui-monospace,monospace;font-size:12px;color:#475569;width:92px">{{ f.no }}</span><span style="flex:1">{{ f.subj }}</span><span style="font-size:12px;padding:2px 10px;border-radius:99px;background:{{ f.bg }};color:{{ f.fg }};font-weight:500">{{ f.st }}</span></div>
+        </sc-for>
+      </div>
+      <div style="display:{{ chkDisp }};flex-direction:column;background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:20px">
+        <div style="font-weight:600;font-size:16px">ตรวจสอบเลขรัน</div>
+        <div style="font-size:12px;color:#64748B;margin:2px 0 12px">{{ chkSub }}</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ chkItems }}" as="ci" hint-placeholder-count="2"><div style="padding:12px 14px;border-radius:8px;background:{{ ci.bg }};border:1px solid {{ ci.bd }};font-size:13px"><b>{{ ci.t }}</b> {{ ci.txt }}</div></sc-for>
+          <div style="font-size:12px;color:#64748B">ระบบใหม่ออกเลขอัตโนมัติและล็อกเลขขณะออก จึงไม่เกิดเลขซ้ำ</div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- LISTS -->
+  <sc-if value="{{ isList }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <sc-for list="{{ chips }}" as="c" hint-placeholder-count="5">
+        <button onClick="{{ c.go }}" style="display:{{ stDisp }};padding:6px 14px;border-radius:99px;border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};cursor:pointer;font-size:13px">{{ c.l }} <b>{{ c.n }}</b></button>
+      </sc-for>
+      <select onChange="{{ setDept }}" value="{{ dept }}" style="margin-left:auto;padding:7px 12px;border:1px solid #CBD5E1;border-radius:8px;background:#fff">
+        <sc-for list="{{ deptOpts }}" as="d" hint-placeholder-count="4"><option value="{{ d }}">{{ d }}</option></sc-for>
+      </select>
+      <button onClick="{{ exportCsv }}" title="ส่งออก Excel (CSV)" aria-label="ส่งออก Excel" style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid #CBD5E1;background:#fff;color:#475569;border-radius:8px;cursor:pointer" style-hover="background:#F1F5F9"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5M12 15V3"></path></svg></button>
+    </div>
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;overflow:auto">
+      <table style="width:100%;border-collapse:collapse;min-width:900px">
+        <thead><tr style="background:#F8FAFC;text-align:left;color:#475569;font-size:12px">
+          <th style="padding:12px 16px;font-weight:600">เลขที่</th><th style="padding:12px 8px;font-weight:600">วันที่</th><th style="padding:12px 8px;font-weight:600">{{ colFrom }}</th><th style="padding:12px 8px;font-weight:600">{{ colTo }}</th><th style="padding:12px 8px;font-weight:600;width:34%">เรื่อง</th><th style="display:{{ amtCell }};padding:12px 8px;font-weight:600;text-align:right">จำนวนเงิน</th><th style="padding:12px 8px;font-weight:600">ผู้ดำเนินการ</th><th style="display:{{ stCell }};padding:12px 16px;font-weight:600">สถานะ</th>
+        </tr></thead>
+        <tbody>
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+            <tr onClick="{{ r.open }}" style="border-top:1px solid #F1F5F9;cursor:pointer;background:{{ r.rowBg }}" style-hover="background:var(--pl)">
+              <td style="padding:12px 16px;font-family:ui-monospace,monospace;font-size:13px;white-space:nowrap;color:var(--pd);font-weight:500">{{ r.no }}</td>
+              <td style="padding:12px 8px;white-space:nowrap;color:#475569">{{ r.date }}</td>
+              <td style="padding:12px 8px">{{ r.a }}</td><td style="padding:12px 8px">{{ r.b }}</td>
+              <td style="padding:12px 8px">{{ r.subj }}</td>
+              <td style="display:{{ amtCell }};padding:12px 8px;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums">{{ r.amt }}</td>
+              <td style="padding:12px 8px;white-space:nowrap">{{ r.who }}</td>
+              <td style="display:{{ stCell }};padding:12px 16px"><span style="font-size:12px;padding:3px 10px;border-radius:99px;background:{{ r.bg }};color:{{ r.fg }};font-weight:500;white-space:nowrap">{{ r.st }}</span></td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+      <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}"><div style="padding:40px;text-align:center;color:#64748B">ไม่พบรายการตามเงื่อนไข</div></sc-if>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:13px;color:#64748B">
+      <span>แสดง {{ pgFrom }}–{{ pgTo }} จาก {{ rowCount }} รายการ · คลิกแถวเพื่อดูรายละเอียด</span>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+        <span>แถวต่อหน้า</span>
+        <select value="{{ ps }}" onChange="{{ setPs }}" style="padding:5px 8px;border:1px solid #CBD5E1;border-radius:8px;background:#fff;margin-right:8px"><option value="10">10</option><option value="20">20</option><option value="50">50</option></select>
+        <button onClick="{{ prevPg }}" title="หน้าก่อนหน้า" aria-label="หน้าก่อนหน้า" style="opacity:{{ prevOp }};width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1px solid #CBD5E1;background:#fff;color:#475569;border-radius:8px;cursor:pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
+        <sc-for list="{{ pageBtns }}" as="b" hint-placeholder-count="3"><button onClick="{{ b.go }}" style="min-width:32px;height:32px;padding:0 8px;border:1px solid {{ b.bd }};background:{{ b.bg }};color:{{ b.fg }};border-radius:8px;cursor:{{ b.cur }};font-size:13px">{{ b.l }}</button></sc-for>
+        <button onClick="{{ nextPg }}" title="หน้าถัดไป" aria-label="หน้าถัดไป" style="opacity:{{ nextOp }};width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1px solid #CBD5E1;background:#fff;color:#475569;border-radius:8px;cursor:pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- WORKFLOW BOARD -->
+  <sc-if value="{{ isFlow }}" hint-placeholder-val="{{ false }}">
+    <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:16px 20px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <span style="font-weight:600">วงจรหนังสือออก</span>
+      <span style="color:#64748B">ร่าง → ตรวจสอบ → ลงนาม → ออกเลข → ส่ง → ปิดเรื่อง</span>
+      <span style="margin-left:auto;padding:4px 12px;border-radius:99px;background:#FEF2F2;color:#B91C1C;font-size:12px;font-weight:500">↺ ส่งคืนแก้ไข วนกลับไปขั้นร่างจนกว่าจะผ่าน</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;align-items:start">
+      <sc-for list="{{ board }}" as="col" hint-placeholder-count="5">
+        <div style="background:#F1F5F9;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;align-items:center;gap:8px;padding:2px 4px"><span style="width:10px;height:10px;border-radius:99px;background:{{ col.c }}"></span><b style="flex:1">{{ col.l }}</b><span style="font-size:12px;color:#64748B">{{ col.n }}</span></div>
+          <sc-for list="{{ col.items }}" as="it" hint-placeholder-count="2">
+            <div onClick="{{ it.open }}" style="background:#fff;border-radius:8px;padding:12px;border:1px solid #E2E8F0;cursor:pointer;display:flex;flex-direction:column;gap:6px" style-hover="border-color:var(--p)">
+              <span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--pd)">{{ it.no }}</span>
+              <span style="font-size:13px">{{ it.subj }}</span>
+              <span style="font-size:12px;color:#64748B">{{ it.who }} · {{ it.date }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <!-- REPORTS -->
+  <sc-if value="{{ isReport }}" hint-placeholder-val="{{ false }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px">
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:20px">
+        <div style="font-weight:600;font-size:16px">ยอดเงินในหนังสือออก จำแนกตามหมวดเรื่อง</div>
+        <div style="font-size:12px;color:#64748B;margin:2px 0 14px">รวมเฉพาะรายการที่ระบุจำนวนเงิน (บาท)</div>
+        <sc-for list="{{ amtBars }}" as="b" hint-placeholder-count="5">
+          <div style="display:grid;grid-template-columns:150px 1fr 110px;align-items:center;gap:10px;margin-bottom:10px"><span style="font-size:13px">{{ b.l }}</span><div style="background:#F1F5F9;border-radius:99px;height:12px"><div style="width:{{ b.w }};background:{{ b.c }};height:12px;border-radius:99px"></div></div><span style="text-align:right;font-variant-numeric:tabular-nums;font-weight:600">{{ b.n }}</span></div>
+        </sc-for>
+      </div>
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:20px">
+        <div style="font-weight:600;font-size:16px">รายงานที่ออกได้</div>
+        <div style="font-size:12px;color:#64748B;margin:2px 0 14px">ข้อมูลตามปีที่เลือกที่แถบด้านบน ส่งออกเป็น Excel (CSV) หรือ PDF</div>
+        <sc-for list="{{ reportList }}" as="rp" hint-placeholder-count="6">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid #F1F5F9"><span style="flex:1">{{ rp.l }}</span><button onClick="{{ rp.xl }}" title="ส่งออก Excel (CSV)" style="padding:4px 12px;border:1px solid #CBD5E1;background:#fff;border-radius:6px;cursor:pointer;font-size:12px" style-hover="background:#F1F5F9">Excel</button><button onClick="{{ rp.pdf }}" title="พิมพ์ / บันทึกเป็น PDF" style="padding:4px 12px;border:1px solid #CBD5E1;background:#fff;border-radius:6px;cursor:pointer;font-size:12px" style-hover="background:#F1F5F9">PDF</button></div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ADMIN -->
+  <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:14px 18px;border-radius:10px;background:var(--pl);border:1px solid var(--pb);font-size:13px">เปิด/ปิดฟังก์ชันของระบบได้ที่นี่ เมนูและช่องที่ปิดจะถูกซ่อนจากผู้ใช้ทุกคน ข้อมูลเดิมไม่ถูกลบ และเปิดกลับมาใช้ได้ทุกเมื่อ ค่าเริ่มต้นเน้นการออกเลขหนังสือออกและทะเบียนหนังสือรับเข้า</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;align-items:start">
+      <sc-for list="{{ adminGroups }}" as="g" hint-placeholder-count="3">
+        <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:20px">
+          <div style="font-weight:600;font-size:16px">{{ g.title }}</div>
+          <div style="font-size:12px;color:#64748B;margin:2px 0 8px">{{ g.sub }}</div>
+          <sc-for list="{{ g.items }}" as="t" hint-placeholder-count="3">
+            <div onClick="{{ t.tog }}" style="display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #F1F5F9;cursor:pointer"><div style="flex:1"><div style="font-weight:500">{{ t.l }}</div><div style="font-size:12px;color:#64748B">{{ t.d }}</div></div><div style="width:42px;height:24px;border-radius:99px;background:{{ t.bg }};position:relative;flex:none"><div style="position:absolute;top:3px;{{ t.side }}:3px;width:18px;height:18px;border-radius:99px;background:#fff"></div></div></div>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <!-- SETTINGS -->
+  <sc-if value="{{ isSet }}" hint-placeholder-val="{{ false }}">
+    <div style="display:grid;grid-template-columns:220px 1fr;gap:20px;align-items:start">
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:2px">
+        <sc-for list="{{ setTabs }}" as="t" hint-placeholder-count="8">
+          <div onClick="{{ t.go }}" style="padding:9px 12px;border-radius:8px;cursor:pointer;background:{{ t.bg }};color:{{ t.fg }};font-weight:{{ t.fw }}">{{ t.l }}</div>
+        </sc-for>
+      </div>
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px;min-width:0">
+        <div><div style="font-weight:600;font-size:17px">{{ setTitle }}</div><div style="font-size:13px;color:#64748B">{{ setSub }}</div></div>
+
+        <sc-if value="{{ s_num }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;align-items:start">
+            <sc-for list="{{ cfgCards }}" as="cc" hint-placeholder-count="2">
+              <div style="border:1px solid #E2E8F0;border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0">
+                <div><div style="font-weight:600;font-size:15px">{{ cc.title }}</div><div style="font-size:12px;color:#64748B">{{ cc.sub }}</div></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                  <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">คำนำหน้า<input value="{{ cc.prefix }}" onChange="{{ cc.setPrefix }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;font-family:ui-monospace,monospace"></label>
+                  <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">จำนวนหลักเลขรัน<select value="{{ cc.digits }}" onChange="{{ cc.setDigits }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><option value="1">1 หลัก (1)</option><option value="2">2 หลัก (01)</option><option value="3">3 หลัก (001)</option><option value="4">4 หลัก (0001)</option></select></label>
+                  <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">รูปแบบปี<select value="{{ cc.yfmt }}" onChange="{{ cc.setYfmt }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><option value="full">พ.ศ. 4 หลัก (2569)</option><option value="short">พ.ศ. 2 หลัก (69)</option></select></label>
+                  <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">เริ่มเลขใหม่ทุก<select value="{{ cc.reset }}" onChange="{{ cc.setReset }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><option value="cal">ปีปฏิทิน (1 ม.ค.)</option><option value="fy">ปีงบประมาณ (1 ต.ค.)</option></select></label>
+                </div>
+                <div style="padding:12px 14px;border-radius:8px;background:var(--pl);border:1px solid var(--pb);font-size:13px">ตัวอย่างเลขล่าสุดของชุดนี้ <b style="font-family:ui-monospace,monospace;font-size:15px;color:var(--pd)">{{ cc.sample }}</b></div>
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><b style="flex:1;font-size:13px">เลขถัดไป แยกตามปี</b><button onClick="{{ cc.addYear }}" title="เพิ่มปีถัดไป เริ่มเลขที่ 1" aria-label="เพิ่มปีถัดไป" style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid var(--p);background:var(--pl);color:var(--pd);border-radius:8px;cursor:pointer" style-hover="background:var(--pl2)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg></button></div>
+                  <sc-for list="{{ cc.years }}" as="y" hint-placeholder-count="2">
+                    <div style="display:grid;grid-template-columns:minmax(90px,1fr) 80px minmax(0,1.2fr);gap:10px;align-items:center;padding:8px 0;border-top:1px solid #F1F5F9;font-size:13px"><span>{{ y.lbl }}</span><input type="number" min="1" value="{{ y.next }}" onChange="{{ y.setNext }}" style="padding:6px 8px;border:1px solid #CBD5E1;border-radius:8px;text-align:right;width:100%"><span style="font-family:ui-monospace,monospace;color:#64748B;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">→ {{ y.ex }}</span></div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ numToggles }}" as="t" hint-placeholder-count="4"><div onClick="{{ t.tog }}" style="display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid #F1F5F9;cursor:pointer"><span style="flex:1">{{ t.l }}</span><div style="width:40px;height:22px;border-radius:99px;background:{{ t.bg }};position:relative"><div style="position:absolute;top:2px;{{ t.side }}:2px;width:18px;height:18px;border-radius:99px;background:#fff"></div></div></div></sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ s_table }}" hint-placeholder-val="{{ false }}">
+          <div style="overflow:auto"><table style="width:100%;border-collapse:collapse"><thead><tr style="text-align:left;color:#475569;font-size:12px;background:#F8FAFC"><sc-for list="{{ setHead }}" as="h" hint-placeholder-count="4"><th style="padding:10px 12px;font-weight:600">{{ h }}</th></sc-for></tr></thead>
+          <tbody><sc-for list="{{ setRows }}" as="sr" hint-placeholder-count="5"><tr style="border-top:1px solid #F1F5F9">
+            <td style="padding:6px 12px;font-weight:500"><input value="{{ sr.c1 }}" onChange="{{ sr.e1 }}" style="display:{{ sr.ed }};width:100%;padding:6px 8px;border:1px solid #E2E8F0;border-radius:6px"><span style="display:{{ sr.vw }}">{{ sr.c1 }}</span></td>
+            <td style="padding:6px 12px"><input value="{{ sr.c2 }}" onChange="{{ sr.e2 }}" style="display:{{ sr.ed }};width:100%;padding:6px 8px;border:1px solid #E2E8F0;border-radius:6px"><span style="display:{{ sr.vw }}">{{ sr.c2 }}</span></td>
+            <td style="padding:6px 12px"><input value="{{ sr.c3 }}" onChange="{{ sr.e3 }}" style="display:{{ sr.ed }};width:100%;padding:6px 8px;border:1px solid #E2E8F0;border-radius:6px"><span style="display:{{ sr.vw }}">{{ sr.c3 }}</span></td>
+            <td style="padding:6px 12px"><span style="display:{{ sr.vw }}">{{ sr.c4 }}</span><button onClick="{{ sr.del }}" title="ลบรายการ" aria-label="ลบรายการ" style="display:{{ sr.edF }};align-items:center;justify-content:center;width:30px;height:30px;border:1px solid #FECACA;background:#fff;color:#B91C1C;border-radius:8px;cursor:pointer" style-hover="background:#FEF2F2"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"></path></svg></button></td>
+          </tr></sc-for></tbody></table></div>
+          <div style="display:{{ addDisp }}"><button onClick="{{ addRow }}" style="padding:8px 14px;border:1px dashed var(--p);background:var(--pl);color:var(--pd);border-radius:8px;cursor:pointer" style-hover="background:var(--pl2)">+ เพิ่มรายการ</button></div>
+        </sc-if>
+
+        <sc-if value="{{ s_flow }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ flowSteps }}" as="fs" hint-placeholder-count="6"><div style="display:flex;align-items:center;gap:14px;padding:12px 14px;border:1px solid #E2E8F0;border-radius:8px"><span style="width:28px;height:28px;border-radius:99px;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px">{{ fs.i }}</span><b style="width:120px">{{ fs.l }}</b><span style="flex:1;color:#475569">{{ fs.d }}</span><span style="font-size:12px;padding:2px 10px;background:#F1F5F9;border-radius:99px">SLA {{ fs.sla }}</span></div></sc-for>
+          </div>
+          <div style="padding:12px 14px;border-radius:8px;background:#FEF2F2;border:1px solid #FECACA;font-size:13px">เมื่อผู้ตรวจหรือผู้ลงนามส่งคืนแก้ไข เรื่องจะวนกลับไปที่ขั้น "ร่าง" ของผู้ดำเนินการเดิม พร้อมเหตุผล และเลขที่หนังสือเดิมยังคงอยู่ (นับรอบแก้ไข)</div>
+        </sc-if>
+
+        <sc-if value="{{ s_notify }}" hint-placeholder-val="{{ false }}">
+          <sc-for list="{{ notifyList }}" as="t" hint-placeholder-count="6"><div onClick="{{ t.tog }}" style="display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid #F1F5F9;cursor:pointer"><div style="flex:1"><div>{{ t.l }}</div><div style="font-size:12px;color:#64748B">{{ t.d }}</div></div><div style="width:40px;height:22px;border-radius:99px;background:{{ t.bg }};position:relative"><div style="position:absolute;top:2px;{{ t.side }}:2px;width:18px;height:18px;border-radius:99px;background:#fff"></div></div></div></sc-for>
+        </sc-if>
+
+        <sc-if value="{{ s_db }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;background:#F8FAFC;border:1px solid #E2E8F0"><span style="width:10px;height:10px;border-radius:99px;background:{{ dbDot }}"></span><span style="flex:1;font-size:14px">{{ dbMsg }}</span></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">Google Sheet (ฐานข้อมูล)<input readonly value="1fG1U1d_BMtzcI9KdGINg17mdbAXeFuNjopBfu_vSEvg" style="padding:9px 12px;border:1px solid #E2E8F0;border-radius:8px;background:#F8FAFC;font-family:ui-monospace,monospace;font-size:12px;color:#475569"></label>
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">Web App URL (จาก Apps Script)<input value="{{ dbUrl }}" onChange="{{ setDbUrl }}" placeholder="https://script.google.com/macros/s/…/exec" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"></label>
+            <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">รหัส (TOKEN)<input type="password" value="{{ dbToken }}" onChange="{{ setDbToken }}" placeholder="ตรงกับ TOKEN ในสคริปต์" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"></label>
+          </div>
+          <div onClick="{{ togDbAuto }}" style="display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid #F1F5F9;cursor:pointer"><div style="flex:1"><div>ซิงก์อัตโนมัติ และขึ้นชีทใหม่เมื่อขึ้นปีงบประมาณ</div><div style="font-size:12px;color:#64748B">บันทึกทุกครั้งที่ออกเลข แก้ไข หรือยกเลิก · ชีทปีงบฯ ใหม่ (1 ต.ค.) ถูกสร้างอัตโนมัติ</div></div><div style="width:40px;height:22px;border-radius:99px;background:{{ dbAutoBg }};position:relative"><div style="position:absolute;top:2px;{{ dbAutoSide }}:2px;width:18px;height:18px;border-radius:99px;background:#fff"></div></div></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button onClick="{{ dbTest }}" style="padding:9px 14px;border:0;background:var(--p);color:#fff;border-radius:8px;cursor:pointer;font-weight:500" style-hover="background:var(--pd)">ทดสอบการเชื่อมต่อ</button>
+            <button onClick="{{ dbBulk }}" style="padding:9px 14px;border:1px solid #CBD5E1;background:#fff;border-radius:8px;cursor:pointer" style-hover="background:#F1F5F9">ส่งข้อมูลทั้งหมดขึ้นชีท</button>
+            <button onClick="{{ dbPull }}" style="padding:9px 14px;border:1px solid #CBD5E1;background:#fff;border-radius:8px;cursor:pointer" style-hover="background:#F1F5F9">ดึงข้อมูลจากชีท</button>
+          </div>
+          <div>
+            <div style="font-weight:600;margin-bottom:6px">ชีทแยกตามปีงบประมาณ</div>
+            <sc-for list="{{ dbSheets }}" as="sh" hint-placeholder-count="4"><div style="display:grid;grid-template-columns:minmax(120px,1fr) 90px auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid #F1F5F9;font-size:13px"><span style="font-family:ui-monospace,monospace">{{ sh.name }}</span><span style="color:#64748B;text-align:right">{{ sh.n }} รายการ</span><span style="font-size:12px;padding:2px 10px;border-radius:99px;background:{{ sh.bg }};color:{{ sh.fg }};font-weight:500">{{ sh.st }}</span></div></sc-for>
+          </div>
+          <div style="padding:14px 16px;border-radius:10px;background:var(--pl);border:1px solid var(--pb);font-size:13px;display:flex;flex-direction:column;gap:6px">
+            <b>วิธีเชื่อมต่อ (ทำครั้งเดียว)</b>
+            <span>1. เปิดชีท > ส่วนขยาย > Apps Script แล้ววางโค้ดตัวเชื่อม (ปุ่มด้านล่าง) และตั้ง TOKEN</span>
+            <span>2. ทำให้ใช้งานได้ > เว็บแอป > Execute as: Me, Who has access: Anyone</span>
+            <span>3. คัดลอก Web App URL มาใส่ด้านบน แล้วกดทดสอบการเชื่อมต่อ จากนั้นกดส่งข้อมูลทั้งหมดขึ้นชีท</span>
+            <div><button onClick="{{ dbCopyCode }}" style="padding:7px 12px;border:1px solid var(--p);background:#fff;color:var(--pd);border-radius:8px;cursor:pointer" style-hover="background:var(--pl2)">คัดลอกโค้ด Apps Script</button></div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ s_io }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
+            <div style="border:1px solid #E2E8F0;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px"><b>นำเข้าจาก Google Sheets</b><span style="font-size:13px;color:#64748B">เชื่อมไฟล์ "เอกสารรับเข้า-ออกเลขกบ.THAMC" แท็บ หนังสือออกเลข กบ. / หนังสือรับเข้า ปี 2568–2569 ตรวจแถวซ้ำก่อนนำเข้า</span><button onClick="{{ ioImport }}" style="align-self:flex-start;padding:8px 14px;border:0;background:var(--p);color:#fff;border-radius:8px;cursor:pointer">เลือกไฟล์ / ลิงก์</button></div>
+            <div style="border:1px solid #E2E8F0;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px"><b>สำรองข้อมูล</b><span style="font-size:13px;color:#64748B">สำรองอัตโนมัติทุกวัน 02:00 น. เก็บย้อนหลัง 30 วัน · ล่าสุด 29 ต.ค. 2569 02:00</span><button onClick="{{ ioBackup }}" style="align-self:flex-start;padding:8px 14px;border:1px solid #CBD5E1;background:#fff;border-radius:8px;cursor:pointer">สำรองทันที</button></div>
+            <div style="border:1px solid #E2E8F0;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px"><b>เก็บเอกสาร</b><span style="font-size:13px;color:#64748B">ปิดปี: ล็อกเลขรันปี 2568 ไม่ให้แก้ไข และเก็บถาวร</span><button onClick="{{ ioClose }}" style="align-self:flex-start;padding:8px 14px;border:1px solid #CBD5E1;background:#fff;border-radius:8px;cursor:pointer">ปิดปี 2568</button></div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  </div>
+</main>
+
+<!-- DRAWER -->
+<sc-if value="{{ sel }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeSel }}" style="position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:20"></div>
+  <aside style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:620px;max-width:calc(100% - 32px);max-height:90vh;background:#fff;z-index:21;border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(15,23,42,.35);display:flex;flex-direction:column">
+    <div style="padding:20px 24px;border-bottom:1px solid var(--pl2);background:linear-gradient(135deg,var(--pl),#fff);display:flex;gap:12px;align-items:start">
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-family:ui-monospace,monospace;color:#fff;background:var(--p);font-weight:600;font-size:15px;padding:3px 12px;border-radius:99px">{{ d.no }}</span>
+          <button onClick="{{ copyNo }}" title="คัดลอกเลข" aria-label="คัดลอกเลข" style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid var(--pb);background:#fff;color:var(--pd);border-radius:8px;cursor:pointer" style-hover="background:var(--pl2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:start"><div style="flex:1;font-size:17px;font-weight:600;line-height:1.4">{{ d.subj }}</div>
+          <button onClick="{{ copySubj }}" title="คัดลอกชื่อเรื่อง" style="flex:none;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid #E2E8F0;background:#fff;color:#475569;border-radius:8px;cursor:pointer" style-hover="background:#F1F5F9"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button></div>
+      </div>
+      <button onClick="{{ closeSel }}" style="border:0;background:#F1F5F9;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:16px">✕</button>
+    </div>
+    <div style="padding:20px 24px;overflow:auto;flex:1;display:flex;flex-direction:column;gap:18px">
+      <div style="display:{{ editDisp }};grid-template-columns:1fr 1fr;gap:12px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;padding:16px 18px;font-size:13px">
+        <div style="grid-column:1/-1;font-weight:600;color:#B45309">แก้ไขข้อมูล (เลขที่ {{ d.no }} ไม่สามารถแก้ไขได้)</div>
+        <label style="display:flex;flex-direction:column;gap:4px">วันที่<input value="{{ ef.date }}" onChange="{{ eDate }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"></label>
+        <label style="display:flex;flex-direction:column;gap:4px">{{ d.whoLabel }}<select value="{{ ef.who }}" onChange="{{ eWho }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><sc-for list="{{ peopleE }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+        <label style="display:flex;flex-direction:column;gap:4px">{{ d.aLabel }}<select value="{{ ef.a }}" onChange="{{ eA }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><sc-for list="{{ orgOptsA }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+        <label style="display:{{ bSel }};flex-direction:column;gap:4px">{{ d.bLabel }}<select value="{{ ef.b }}" onChange="{{ eB }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><sc-for list="{{ orgOptsB }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+        <label style="display:{{ bTxt }};flex-direction:column;gap:4px">{{ d.bLabel }}<input value="{{ ef.b }}" onChange="{{ eB }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"></label>
+        <label style="grid-column:1/-1;display:flex;flex-direction:column;gap:4px">เรื่อง<textarea rows="2" value="{{ ef.subj }}" onChange="{{ eSubj }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;resize:vertical;background:#fff"></textarea></label>
+        <label style="display:{{ amtDisp }};flex-direction:column;gap:4px">จำนวนเงิน (บาท)<input value="{{ ef.amt }}" onChange="{{ eAmt }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;text-align:right;background:#fff"></label>
+        <label style="grid-column:1/-1;display:flex;flex-direction:column;gap:4px">หมายเหตุ<textarea rows="2" value="{{ ef.note }}" onChange="{{ eNote }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;resize:vertical;background:#fff"></textarea></label>
+      </div>
+      <div style="display:{{ viewDisp }};grid-template-columns:120px 1fr;gap:10px 12px;font-size:14px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:16px 18px">
+        <sc-for list="{{ d.fields }}" as="f" hint-placeholder-count="6"><span style="color:#64748B">{{ f.l }}</span><span>{{ f.v }}</span></sc-for>
+      </div>
+      <div style="display:{{ stDisp }};flex-direction:column">
+        <div style="font-weight:600;margin-bottom:10px">ความคืบหน้า</div>
+        <sc-for list="{{ d.steps }}" as="s" hint-placeholder-count="5">
+          <div style="display:flex;gap:12px;padding-bottom:14px;position:relative">
+            <div style="width:22px;height:22px;flex:none;border-radius:99px;background:{{ s.bg }};color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center">{{ s.mark }}</div>
+            <div><div style="font-weight:500;color:{{ s.fg }}">{{ s.l }}</div><div style="font-size:12px;color:#64748B">{{ s.d }}</div></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:{{ attDisp }};flex-direction:column"><div style="font-weight:600;margin-bottom:8px">ไฟล์แนบ</div><div style="display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px dashed #CBD5E1;border-radius:8px;color:#64748B;font-size:13px"><span style="flex:1">แนบไฟล์สแกนหนังสือ (PDF) · ลากวางที่นี่</span><button onClick="{{ attachFile }}" style="padding:4px 10px;border:1px solid #CBD5E1;background:#fff;border-radius:6px;cursor:pointer" style-hover="background:#F1F5F9">เลือกไฟล์</button></div></div>
+      <div style="display:{{ viewBlock }}"><div style="font-weight:600;margin-bottom:8px">หมายเหตุ</div><div style="font-size:13px;color:#475569;padding:10px 12px;background:#F8FAFC;border-radius:8px">{{ d.note }}</div></div>
+    </div>
+    <div style="padding:16px 24px;border-top:1px solid #E2E8F0;display:flex;gap:8px;flex-wrap:wrap">
+      <button onClick="{{ saveEdit }}" title="บันทึกการแก้ไข" aria-label="บันทึกการแก้ไข" style="display:{{ editFlex }};align-items:center;justify-content:center;width:40px;height:40px;border:0;background:var(--p);color:#fff;border-radius:10px;cursor:pointer" style-hover="background:var(--pd)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></button>
+      <button onClick="{{ cancelEdit }}" title="ยกเลิกการแก้ไข" aria-label="ยกเลิกการแก้ไข" style="display:{{ editFlex }};align-items:center;justify-content:center;width:40px;height:40px;border:1px solid #CBD5E1;background:#fff;color:#475569;border-radius:10px;cursor:pointer" style-hover="background:#F1F5F9"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+      <button onClick="{{ startEdit }}" title="แก้ไขข้อมูล" aria-label="แก้ไขข้อมูล" style="display:{{ viewFlex }};align-items:center;justify-content:center;width:40px;height:40px;border:1px solid var(--p);background:var(--pl);color:var(--pd);border-radius:10px;cursor:pointer" style-hover="background:var(--pl2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg></button>
+      <button onClick="{{ advance }}" title="{{ d.advLabel }}" aria-label="{{ d.advLabel }}" style="display:{{ advDisp }};align-items:center;justify-content:center;width:40px;height:40px;border:0;background:var(--p);color:#fff;border-radius:10px;cursor:pointer" style-hover="background:var(--pd)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+      <button onClick="{{ sendBack }}" title="ส่งคืนแก้ไข" aria-label="ส่งคืนแก้ไข" style="display:{{ advDisp }};align-items:center;justify-content:center;width:40px;height:40px;border:1px solid #F59E0B;background:#FFFBEB;color:#B45309;border-radius:10px;cursor:pointer" style-hover="background:#FEF3C7"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"></path><path d="M21 17a9 9 0 0 0-15-6.7L3 13"></path></svg></button>
+      <button onClick="{{ cancelDoc }}" title="ยกเลิกเลข" aria-label="ยกเลิกเลข" style="display:{{ viewFlex }};align-items:center;justify-content:center;width:40px;height:40px;border:1px solid #FECACA;background:#fff;color:#B91C1C;border-radius:10px;cursor:pointer" style-hover="background:#FEF2F2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m5.6 5.6 12.8 12.8"></path></svg></button>
+      <button onClick="{{ printReg }}" title="พิมพ์ทะเบียน" aria-label="พิมพ์ทะเบียน" style="display:{{ viewFlex }};align-items:center;justify-content:center;width:40px;height:40px;margin-left:auto;border:1px solid #CBD5E1;background:#fff;color:#475569;border-radius:10px;cursor:pointer" style-hover="background:#F1F5F9"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"></path><rect x="3" y="9" width="18" height="9" rx="2"></rect><path d="M6 14h12v7H6z"></path></svg></button>
+    </div>
+  </aside>
+</sc-if>
+
+<!-- MODAL -->
+<sc-if value="{{ modal }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:30;display:flex;align-items:center;justify-content:center;padding:20px">
+    <div style="background:#fff;border-radius:14px;width:640px;max-width:100%;max-height:92vh;overflow:auto;box-shadow:0 20px 50px rgba(15,23,42,.3)">
+      <div style="padding:20px 24px;border-bottom:1px solid #E2E8F0;display:flex;align-items:center"><div style="flex:1"><div style="font-size:18px;font-weight:600">{{ mTitle }}</div><div style="font-size:13px;color:#64748B">เลขที่ที่จะได้รับ <b style="font-family:ui-monospace,monospace;color:var(--pd)">{{ nextNo }}</b> (ล็อกเลขอัตโนมัติเมื่อบันทึก)</div></div><button onClick="{{ closeModal }}" style="border:0;background:#F1F5F9;border-radius:8px;width:32px;height:32px;cursor:pointer">✕</button></div>
+      <div style="padding:20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">{{ mFrom }}<select value="{{ form.a }}" onChange="{{ fA }}" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"><sc-for list="{{ orgOpts }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+        <label style="display:{{ mTxt }};flex-direction:column;gap:4px;font-size:13px">{{ mTo }}<input value="{{ form.b }}" onChange="{{ fB }}" placeholder="เช่น ฝกน.059/68" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"></label>
+        <label style="display:{{ mSel }};flex-direction:column;gap:4px;font-size:13px">{{ mTo }}<select value="{{ form.b }}" onChange="{{ fB }}" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"><sc-for list="{{ orgOpts }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+        <label style="grid-column:1/-1;display:flex;flex-direction:column;gap:4px;font-size:13px">เรื่อง<textarea rows="2" value="{{ form.subj }}" onChange="{{ fSubj }}" placeholder="เช่น ขออนุมัติเบิกจ่ายเงินค่ารักษาพยาบาลคืนผู้รับบริการ" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px;resize:vertical"></textarea></label>
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">วันที่ (วว/ดด/พ.ศ.)<input value="{{ form.date }}" onChange="{{ fDate }}" placeholder="29/10/2569" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"></label>
+        <label style="display:{{ amtDisp }};flex-direction:column;gap:4px;font-size:13px">จำนวนเงิน (บาท)<input value="{{ form.amt }}" onChange="{{ fAmt }}" placeholder="0.00" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px;text-align:right"></label>
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">{{ colWho }}<select value="{{ form.who }}" onChange="{{ fWho }}" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"><sc-for list="{{ people }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+        <label style="display:{{ secDisp }};flex-direction:column;gap:4px;font-size:13px">ความเร่งด่วน / ชั้นความลับ<select style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"><option>ปกติ</option><option>ด่วน</option><option>ด่วนที่สุด</option><option>ลับ</option></select></label>
+        <div onClick="{{ attachFile }}" style="cursor:pointer;display:{{ attDisp }};grid-column:1/-1;border:1px dashed #CBD5E1;border-radius:8px;padding:12px;color:#64748B;font-size:13px">แนบไฟล์สแกน PDF · ลากวางที่นี่</div>
+      </div>
+      <div style="padding:16px 24px;border-top:1px solid #E2E8F0;display:flex;gap:8px;justify-content:flex-end"><button onClick="{{ closeModal }}" style="padding:9px 16px;border:1px solid #CBD5E1;background:#fff;border-radius:8px;cursor:pointer">ยกเลิก</button><button onClick="{{ saveDoc }}" style="padding:9px 18px;border:0;background:var(--p);color:#fff;border-radius:8px;cursor:pointer;font-weight:500">บันทึกและออกเลข</button></div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ themeOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeTheme }}" style="position:fixed;inset:0;background:rgba(15,23,42,.35);z-index:50"></div>
+  <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:560px;max-width:calc(100% - 32px);max-height:90vh;overflow:auto;background:#fff;border-radius:16px;z-index:51;box-shadow:0 24px 60px rgba(15,23,42,.35);padding:24px">
+    <div style="display:flex;align-items:center;margin-bottom:4px"><div style="flex:1;font-size:18px;font-weight:600">เลือกธีมสี</div><button onClick="{{ closeTheme }}" title="ปิด" aria-label="ปิด" style="border:0;background:#F1F5F9;border-radius:8px;width:32px;height:32px;cursor:pointer">✕</button></div>
+    <div style="font-size:13px;color:#64748B;margin-bottom:16px">คลิกเพื่อเปลี่ยนทันที ระบบจำธีมที่เลือกไว้ในเครื่องนี้</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px">
+      <sc-for list="{{ themes }}" as="t" hint-placeholder-count="6">
+        <div onClick="{{ t.go }}" style="cursor:pointer;border:2px solid {{ t.bd }};border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px;background:#fff" style-hover="border-color:#94A3B8">
+          <div style="height:62px;border-radius:8px;background:#F8FAFC;border:1px solid #E2E8F0;display:flex;overflow:hidden">
+            <div style="width:26%;background:#fff;border-right:1px solid #E2E8F0;padding:6px 5px;display:flex;flex-direction:column;gap:4px"><div style="height:8px;border-radius:3px;background:{{ t.pl2 }}"></div><div style="height:8px;border-radius:3px;background:#E2E8F0"></div><div style="height:8px;border-radius:3px;background:#E2E8F0"></div></div>
+            <div style="flex:1;padding:6px;display:flex;flex-direction:column;gap:5px"><div style="display:flex;gap:4px"><div style="flex:1;height:10px;border-radius:3px;background:#E2E8F0"></div><div style="width:18px;height:10px;border-radius:3px;background:{{ t.p }}"></div></div><div style="height:7px;width:70%;border-radius:3px;background:{{ t.p }}"></div><div style="height:7px;width:45%;border-radius:3px;background:{{ t.pb }}"></div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px"><span style="flex:1;font-weight:500;font-size:14px">{{ t.name }}</span><span style="width:14px;height:14px;border-radius:99px;background:{{ t.p }}"></span><span style="width:14px;height:14px;border-radius:99px;background:{{ t.pd }}"></span><span style="width:14px;height:14px;border-radius:99px;background:{{ t.pb }}"></span></div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ pinOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closePin }}" style="position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:50"></div>
+  <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;max-width:calc(100% - 32px);background:#fff;border-radius:16px;z-index:51;box-shadow:0 24px 60px rgba(15,23,42,.35);padding:28px 24px 22px;display:flex;flex-direction:column;align-items:center;gap:14px">
+    <div style="width:52px;height:52px;border-radius:99px;background:var(--pl);color:var(--p);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+    <div style="text-align:center"><div style="font-size:18px;font-weight:600">เข้าสู่เมนูแอดมิน</div><div style="font-size:13px;color:#64748B">ใส่รหัสผ่านผู้ดูแลระบบเพื่อเปิด/ปิดฟังก์ชัน</div></div>
+    <input type="password" value="{{ pinVal }}" onChange="{{ setPin }}" onKeyDown="{{ pinKey }}" placeholder="รหัสผ่าน" style="width:100%;padding:11px 14px;border:1px solid {{ pinBd }};border-radius:10px;font-size:15px;text-align:center;outline:none">
+    <div style="display:{{ pinMsgDisp }};font-size:13px;color:#B91C1C">รหัสไม่ถูกต้อง กรุณาลองใหม่</div>
+    <div style="display:flex;gap:10px;width:100%"><button onClick="{{ closePin }}" style="flex:1;padding:10px;border:1px solid #CBD5E1;background:#fff;border-radius:10px;cursor:pointer">ยกเลิก</button><button onClick="{{ submitPin }}" style="flex:1;padding:10px;border:0;background:var(--p);color:#fff;border-radius:10px;cursor:pointer;font-weight:500" style-hover="background:var(--pd)">เข้าสู่ระบบ</button></div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}"><div style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0F172A;color:#fff;padding:12px 20px;border-radius:10px;z-index:40;box-shadow:0 8px 24px rgba(0,0,0,.25)">{{ toast }}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const ST = {done:['ดำเนินการแล้ว','#D1FAE5','#047857'],sign:['รอลงนาม','#DBEAFE','#1D4ED8'],return:['ส่งคืนแก้ไข','#FEF3C7','#B45309'],cancel:['ยกเลิก','#FEE2E2','#B91C1C'],draft:['ร่าง/ตรวจสอบ','#F1F5F9','#475569'],wait:['รอผู้รับผิดชอบ','#F3E8FF','#7E22CE']};
+const THEMES = [
+ {id:'teal',name:'เขียวมรกต (เดิม)',p:'#0D9488',pd:'#0F766E',pl:'#F0FDFA',pl2:'#CCFBF1',pb:'#99F6E4'},
+ {id:'blue',name:'น้ำเงินโรงพยาบาล',p:'#1D4ED8',pd:'#1E40AF',pl:'#EFF6FF',pl2:'#DBEAFE',pb:'#BFDBFE'},
+ {id:'indigo',name:'ม่วงครามเข้ม',p:'#4F46E5',pd:'#4338CA',pl:'#EEF2FF',pl2:'#E0E7FF',pb:'#C7D2FE'},
+ {id:'green',name:'เขียวสด',p:'#047857',pd:'#065F46',pl:'#ECFDF5',pl2:'#D1FAE5',pb:'#A7F3D0'},
+ {id:'rose',name:'ชมพูกุหลาบ',p:'#BE185D',pd:'#9D174D',pl:'#FDF2F8',pl2:'#FCE7F3',pb:'#FBCFE8'},
+ {id:'orange',name:'ส้มอิฐ',p:'#C2410C',pd:'#9A3412',pl:'#FFF7ED',pl2:'#FFEDD5',pb:'#FED7AA'},
+ {id:'slate',name:'เทาอมฟ้า',p:'#334155',pd:'#1E293B',pl:'#F1F5F9',pl2:'#E2E8F0',pb:'#CBD5E1'},
+ {id:'purple',name:'ม่วงอเมทิสต์',p:'#7E22CE',pd:'#6B21A8',pl:'#FAF5FF',pl2:'#F3E8FF',pb:'#E9D5FF'}
+];
+const fm = n => n ? n.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2}) : '-';
+const PAL = ['var(--p)','#9333EA','#EC4899','#3B82F6','#F59E0B'];
+const ORGS = ['จัดซื้อและคลังพัสดุ','ฝ่ายการเงินและบัญชี','งานบัญชี','งานการเงิน','EGP','รอง ผอ.ฝ่ายบริหาร','ผู้อำนวยการ','สนับสนุนทั่วไป','สารสนเทศ','HR','การตลาด','ทันตกรรม','รพธ','ฝ่ายบริการเฉพาะทาง','ฝ่ายบริการผู้ป่วยใน','บริการผู้ป่วยนอก'];
+const PEOPLE = ['สาริณี','สุพัตรา','นันทนา','ศุภลักษณ์','อรวรรณ','ศิริขวัญ','ธนบูลย์','สุดารัตน์','พรพจน์','อารีรัตน์'];
+const STEPS = ['ร่าง/ตรวจสอบ','ลงนาม','ออกเลข','ส่งต่อ/ดำเนินการ','ปิดเรื่อง'];
+const SETS = {
+ num:['ชุดเลขรัน / ปี','กำหนดรูปแบบเลขที่หนังสือออก กบ. และเลขทะเบียนรับ'],
+ type:['ประเภทเอกสาร','บันทึกข้อความ หนังสือภายนอก ประกาศ คำสั่ง หนังสือรับรอง'],
+ org:['หน่วยงาน / รหัสหน่วย','โครงสร้างหน่วยงานและรหัสย่อที่ใช้ในเลขที่หนังสือ'],
+ user:['ผู้ใช้และสิทธิ์','กำหนดบทบาท: ผู้ดูแลระบบ เจ้าหน้าที่สารบรรณ ผู้ตรวจ ผู้ลงนาม ผู้อ่าน'],
+ flow:['ขั้นตอนอนุมัติ (Workflow)','กำหนดลำดับ ผู้รับผิดชอบ และกำหนดเวลา (SLA) ของแต่ละขั้น'],
+ sec:['ความเร่งด่วนและชั้นความลับ','ระดับที่เลือกได้ตอนออกเลขหรือรับเข้า'],
+ notify:['การแจ้งเตือน','เลือกช่องทางและเหตุการณ์ที่ต้องการแจ้งเตือน'],
+ audit:['บันทึกการใช้งาน (Audit Log)','ประวัติการสร้าง แก้ไข ยกเลิก และออกเลข ย้อนหลังตรวจสอบได้'],
+ db:['ฐานข้อมูล (Google Sheets)','เก็บข้อมูลบนชีท แยกชีทตามปีงบประมาณ และขึ้นชีทใหม่อัตโนมัติเมื่อขึ้นปีงบฯ ใหม่'],
+ io:['นำเข้า / สำรองข้อมูล','เชื่อมข้อมูลเดิมจาก Google Sheets และสำรองข้อมูล']
+};
+const TBL = {
+ type:[['ชื่อประเภท','รหัส','เลขรัน','จัดการ'],[['หนังสือออก (ภายใน)','กบ','แยกชุด','แก้ไข'],['หนังสือรับเข้า','กบ.','แยกชุด','แก้ไข'],['บันทึกข้อความ','บข','ใช้ชุดร่วม','แก้ไข'],['ประกาศ','ปก','แยกชุด','แก้ไข'],['คำสั่ง','คส','แยกชุด','แก้ไข']]],
+ org:[['หน่วยงาน','รหัสย่อ','ประเภท','จัดการ'],[['ฝ่ายการเงินและบัญชี','กบ','ภายใน','แก้ไข'],['จัดซื้อและคลังพัสดุ','ผจ','ภายใน','แก้ไข'],['สนับสนุนทั่วไป','สท','ภายใน','แก้ไข'],['ฝ่ายบริการเฉพาะทาง','ผตศ','ภายใน','แก้ไข'],['โรงพยาบาลธรรมศาสตร์ (รพธ)','อว.67.07','ภายนอก','แก้ไข'],['มหาวิทยาลัยธรรมศาสตร์','อว.67.06','ภายนอก','แก้ไข']]],
+ user:[['ชื่อ','บทบาท','หน่วยงาน','จัดการ'],[['สาริณี','เจ้าหน้าที่สารบรรณ','การเงินและบัญชี','แก้ไข'],['สุพัตรา','ผู้ตรวจ','การเงินและบัญชี','แก้ไข'],['อรวรรณ','ผู้ลงนาม (ผู้จัดการฝ่าย)','การเงินและบัญชี','แก้ไข'],['ธนบูลย์','เจ้าหน้าที่','การเงินและบัญชี','แก้ไข'],['ผู้ดูแลระบบ','ผู้ดูแลระบบ','สารสนเทศ','แก้ไข']]],
+ sec:[['ระดับ','ประเภท','การแสดงผล','จัดการ'],[['ปกติ','ความเร่งด่วน','ไม่เน้น','แก้ไข'],['ด่วน','ความเร่งด่วน','ป้ายสีเหลือง','แก้ไข'],['ด่วนที่สุด','ความเร่งด่วน','ป้ายสีแดง','แก้ไข'],['ลับ','ชั้นความลับ','จำกัดผู้เห็น','แก้ไข']]],
+ audit:[['เวลา','ผู้ใช้','การกระทำ','รายละเอียด'],[['29/10/69 09:12','สาริณี','ออกเลข','กบ 097/2569'],['29/10/69 09:05','สุพัตรา','ตรวจสอบ','กบ 096/2569 ส่งต่อลงนาม'],['28/10/69 16:40','อรวรรณ','ยกเลิกเลข','กบ 085/2569 ยอดไม่ถึงหนึ่งแสนบาท'],['28/10/69 14:02','ธนบูลย์','แก้ไข','กบ 092/2569 แก้จำนวนเงิน'],['27/10/69 10:30','สาริณี','รับเข้า','กบ.98/69 จาก บริการผู้ป่วยนอก']]]
+};
+class Component extends DCLogic {
+  componentDidMount(){ try{const t=localStorage.getItem('thamc-theme');if(t&&THEMES.some(x=>x.id===t))this.setState({theme:t});}catch(e){}
+    try{const d=JSON.parse(localStorage.getItem('thamc-db')||'null');if(d)this.setState(x=>({db:{...x.db,...d}}),()=>{if(this.state.db.url)this.dbTest();});}catch(e){}
+    fetch('data.json').then(r=>r.json()).then(d=>this.loadData(d)).catch(()=>this.setState({loading:false})); }
+  loadData(d){
+    const ym=n=>{const x=String(n).match(/(\d+)\/(\d+)/);if(!x)return null;let y=+x[2];if(y<100)y+=2500;return [y,+x[1]];};
+    const nx=a=>a.reduce((m,r)=>{const k=ym(r[0]);if(k&&k[0]>=2560&&k[0]<=2575)m[k[0]]=Math.max(m[k[0]]||0,k[1]+1);return m;},{});
+    const out=d.out.map((r,i)=>({id:'o'+i,kind:'out',no:r[0],date:r[1],a:r[2],b:r[3],subj:r[4],amt:r[5],who:r[6],st:r[7],cat:r[8],note:r[9]||'-'}));
+    const inn=d.inn.map((r,i)=>({id:'i'+i,kind:'in',no:r[0],date:r[1],a:r[2],b:r[3],subj:r[4],amt:r[5],who:r[6],handler:r[7],st:r[8],ref:r[3],note:r[9]||'-'}));
+    this.setState(s=>({out,inn,loading:false,cfg:{out:{...s.cfg.out,cnt:{...s.cfg.out.cnt,...nx(d.out)}},in:{...s.cfg.in,cnt:{...s.cfg.in.cnt,...nx(d.inn)}}}}));
+    this.toast('นำเข้าข้อมูลแล้ว: หนังสือออก '+out.length.toLocaleString('th-TH')+' · หนังสือรับเข้า '+inn.length.toLocaleString('th-TH')+' รายการ');
+  }
+  state = {db:{url:'',token:'',auto:true,ok:false,sheets:null,msg:'ยังไม่ได้เชื่อมต่อ'},theme:'teal',themeOpen:false,adminOk:false,pinOpen:false,pinVal:'',pinErr:false,edit:false,ef:{},page:'dash',q:'',st:'all',dept:'ทั้งหมด',sel:null,modal:null,pres:false,setTab:'num',toast:'',out:[],inn:[],loading:true,form:{a:'ฝ่ายการเงินและบัญชี',b:'รอง ผอ.ฝ่ายบริหาร',subj:'',amt:'',who:'สาริณี'},cfg:{out:{prefix:'กบ ',digits:3,yfmt:'full',reset:'cal',cnt:{2568:123,2569:98}},in:{prefix:'กบ.',digits:2,yfmt:'short',reset:'cal',cnt:{2568:105,2569:99}}},tbl:Object.fromEntries(Object.entries(TBL).map(([k,v])=>[k,v[1].map(r=>[...r])])),tg:{},yrMode:'fy',yr:'all',pg:1,ps:10,feat:{flow:false,status:false,report:true,attach:true,amount:true,sec:false,check:true,notify:false,audit:true},setOn:{0:true,1:true,2:true,3:false}};
+  set = o => this.setState(o);
+  toast = m => { this.setState({toast:m}); setTimeout(()=>this.setState({toast:''}),2200); };
+  copy = (t,m) => { const done=()=>this.toast(m); try{navigator.clipboard.writeText(t).then(done,()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();done();});}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();done();} };
+  pd = ds => {const [d,m,y]=String(ds).split('/').map(Number);return {d:d||1,m:m||1,y:y||2569};};
+  fyOf = ds => {const p=this.pd(ds);return p.m>=10?p.y+1:p.y;};
+  yrOf = (ds,mode) => mode==='fy'?this.fyOf(ds):this.pd(ds).y;
+  fmtNo = (c,n,yk) => c.prefix+String(n).padStart(c.digits,'0')+'/'+(c.yfmt==='short'?String(yk).slice(-2):yk);
+  nextOf = (type,ds) => {const c=this.state.cfg[type],yk=c.reset==='fy'?this.fyOf(ds):this.pd(ds).y,n=c.cnt[yk]||1;return {yk,n,no:this.fmtNo(c,n,yk)};};
+  log = (a,d) => {const t=new Date(),hm=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');this.setState(x=>({tbl:{...x.tbl,audit:[['29/10/69 '+hm,'สาริณี',a,d],...x.tbl.audit]}}));};
+  csv = (rows,name) => {const esc=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';const b=new Blob(['\uFEFF'+rows.map(r=>r.map(esc).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),500);this.toast('ส่งออกไฟล์ '+name+' แล้ว');};
+  editCell = (T,i,k,v) => this.setState(x=>({tbl:{...x.tbl,[T]:x.tbl[T].map((r,j)=>j===i?r.map((c,q)=>q===k?v:c):r)}}));
+  delRow = (T,i) => this.setState(x=>({tbl:{...x.tbl,[T]:x.tbl[T].filter((r,j)=>j!==i)}}));
+  addRow = T => this.setState(x=>({tbl:{...x.tbl,[T]:[...x.tbl[T],['รายการใหม่','-','-','']]}}));
+  upd = (id,fn) => { this.setState(s=>({out:s.out.map(r=>r.id===id?fn(r):r),inn:s.inn.map(r=>r.id===id?fn(r):r)})); setTimeout(()=>this.dbPush(id),60); };
+  curFy = () => {const n=new Date(),y=n.getFullYear()+543;return n.getMonth()+1>=10?y+1:y;};
+  dbSet = o => this.setState(x=>({db:{...x.db,...o}}),()=>{try{const d=this.state.db;localStorage.setItem('thamc-db',JSON.stringify({url:d.url,token:d.token,auto:d.auto}));}catch(e){}});
+  dbCall = async p => {const d=this.state.db;if(!d.url)throw new Error('ยังไม่ได้ใส่ Web App URL');const r=await fetch(d.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({token:d.token,...p})});const j=await r.json();if(!j.ok)throw new Error(j.error||'ไม่สำเร็จ');return j;};
+  dbRec = r => ({id:r.id,kind:r.kind,no:r.no,date:r.date,a:r.a,b:r.b,subj:r.subj,amt:r.amt,who:r.who,handler:r.handler||'',st:r.st,cat:r.cat||'',note:r.note||'',edited:r.edited||''});
+  dbPush = id => {const s=this.state;if(!s.db.url||!s.db.auto)return;const r=[...s.out,...s.inn].find(x=>x.id===id);if(!r)return;this.dbCall({action:'upsert',rec:this.dbRec(r)}).then(()=>this.dbSet({msg:'ซิงก์ล่าสุด '+new Date().toLocaleTimeString('th-TH'),ok:true})).catch(e=>{this.dbSet({ok:false,msg:'ซิงก์ไม่สำเร็จ: '+e.message});this.toast('ซิงก์ชีทไม่สำเร็จ');});};
+  dbTest = async () => {try{this.dbSet({msg:'กำลังเชื่อมต่อ…'});let r=await this.dbCall({action:'ping'});const fy=this.curFy();if(this.state.db.auto&&!r.sheets.includes('ออก FY'+fy)){r=await this.dbCall({action:'ensure',fy});this.toast('ขึ้นชีทปีงบประมาณ '+fy+' แล้ว');}this.dbSet({ok:true,sheets:r.sheets,msg:'เชื่อมต่อแล้ว · '+r.sheets.length+' ชีท'});}catch(e){this.dbSet({ok:false,msg:'เชื่อมต่อไม่ได้: '+e.message});}};
+  dbBulk = async () => {try{const s=this.state,all=[...s.out,...s.inn].map(this.dbRec);for(let i=0;i<all.length;i+=400){this.dbSet({msg:'กำลังส่งข้อมูล '+Math.min(i+400,all.length)+'/'+all.length});await this.dbCall({action:'bulk',recs:all.slice(i,i+400)});}await this.dbTest();this.toast('ส่งข้อมูล '+all.length.toLocaleString('th-TH')+' รายการขึ้นชีทแล้ว');}catch(e){this.dbSet({ok:false,msg:'ส่งไม่สำเร็จ: '+e.message});}};
+  dbPull = async () => {try{this.dbSet({msg:'กำลังดึงข้อมูล…'});const j=await this.dbCall({action:'list'});const out=j.recs.filter(r=>r.kind==='out'),inn=j.recs.filter(r=>r.kind==='in');if(!j.recs.length){this.dbSet({msg:'ชีทยังไม่มีข้อมูล ให้กดส่งข้อมูลทั้งหมดก่อน'});return;}this.setState({out,inn});this.dbSet({ok:true,msg:'ดึงข้อมูลแล้ว '+j.recs.length.toLocaleString('th-TH')+' รายการ'});this.toast('ดึงข้อมูลจากชีทแล้ว');}catch(e){this.dbSet({ok:false,msg:'ดึงไม่สำเร็จ: '+e.message});}};
+  dbCopyCode = () => fetch('apps-script.gs').then(r=>r.text()).then(t=>this.copy(t,'คัดลอกโค้ด Apps Script แล้ว')).catch(()=>this.toast('คัดลอกไม่ได้'));
+  cur(){ const s=this.state; return s.sel && [...s.out,...s.inn].find(r=>r.id===s.sel); }
+  renderVals(){
+    const s=this.state, p=s.page, isOut=p==='out', isIn=p==='in';
+    const titles={dash:'ภาพรวม',out:'ทะเบียนหนังสือออก (เลข กบ.)',in:'ทะเบียนหนังสือรับเข้า',flow:'ติดตามเรื่อง / Workflow',report:'รายงาน',set:'ตั้งค่าระบบ',admin:'แอดมิน · เปิด/ปิดฟังก์ชัน'};
+    const cnt = a=>a.filter(r=>!['done','cancel'].includes(r.st)).length;
+    const F=s.feat, D=b=>b?'flex':'none', CD=b=>b?'table-cell':'none';
+    const tg=k=>()=>this.setState(x=>({feat:{...x.feat,[k]:!x.feat[k]}}));
+    const A=(k,l,d)=>({l,d,tog:tg(k),bg:F[k]?'var(--p)':'#CBD5E1',side:F[k]?'right':'left'});
+    const adminGroups=[
+      {title:'เมนูหลัก',sub:'หนังสือออก หนังสือรับเข้า ภาพรวม และตั้งค่า เปิดไว้เสมอ',items:[A('flow','ติดตามเรื่อง / Workflow','กระดานแสดงเรื่องตามขั้นตอน'),A('report','รายงาน','สรุปยอดและส่งออกรายงาน')]},
+      {title:'ข้อมูลในทะเบียน',sub:'เลือกช่องที่ใช้ในฟอร์มและตาราง',items:[A('amount','จำนวนเงิน','ช่องกรอกและคอลัมน์จำนวนเงิน'),A('attach','ไฟล์แนบ','แนบไฟล์สแกน PDF กับหนังสือ'),A('sec','ความเร่งด่วน / ชั้นความลับ','เลือกระดับตอนออกเลขหรือรับเข้า')]},
+      {title:'การอนุมัติและสถานะ',sub:'ใช้เมื่อต้องการติดตามขั้นตอน (ปิดไว้ได้ ระบบยังออกเลขตามปกติ)',items:[A('status','สถานะ ส่งต่อ ส่งคืนแก้ไข','คอลัมน์สถานะ ตัวกรอง ปุ่มส่งต่อ/ส่งคืน และความคืบหน้า')]},
+      {title:'การควบคุมและแจ้งเตือน',sub:'ความถูกต้องของเลขรันและการติดตามการใช้งาน',items:[A('check','ตรวจสอบเลขรัน ซ้ำ/ข้าม','แสดงการ์ดตรวจสอบในภาพรวม'),A('audit','บันทึกการใช้งาน (Audit Log)','เก็บประวัติสร้าง แก้ไข ยกเลิก'),A('notify','การแจ้งเตือน','อีเมลและ LINE Notify')]}];
+    const nav=[['dash','◧','ภาพรวม',0],['out','↗','หนังสือออก (กบ.)',s.out.filter(r=>s.yr==='all'||this.yrOf(r.date,s.yrMode)===Number(s.yr)).length],['in','↙','หนังสือรับเข้า',s.inn.filter(r=>s.yr==='all'||this.yrOf(r.date,s.yrMode)===Number(s.yr)).length],...(F.flow?[['flow','⇄','ติดตามเรื่อง',cnt(s.out)+cnt(s.inn)]]:[]),...(F.report?[['report','▤','รายงาน',0]]:[]),['set','⚙','ตั้งค่า',0],['admin','◈','แอดมิน: เปิด/ปิดฟังก์ชัน',0]].map(([id,icon,label,c])=>({icon,label,go:()=>id==='admin'&&!s.adminOk?this.set({pinOpen:true,pinVal:'',pinErr:false}):this.set({page:id,pg:1,st:'all',dept:'ทั้งหมด',q:'',adminOk:id==='admin'?s.adminOk:false}),bg:p===id?'var(--pl)':'transparent',fg:p===id?'var(--pd)':'#334155',fw:p===id?600:400,hasCount:c>0,count:c,cbg:id==='flow'?'#FEF3C7':'#F1F5F9',cfg:id==='flow'?'#B45309':'#475569'}));
+    const inYr=r=>s.yr==='all'||this.yrOf(r.date,s.yrMode)===Number(s.yr);
+    const fo=s.out.filter(inYr),fi=s.inn.filter(inYr),all=[...fo,...fi];
+    const yrs=[...new Set([...s.out,...s.inn].map(r=>this.yrOf(r.date,s.yrMode)))].sort((a,b)=>b-a);
+    const yrOpts=[{v:'all',l:'ทุกปี'},...yrs.map(y=>({v:String(y),l:(s.yrMode==='fy'?'ปีงบฯ ':'ปี ')+y}))];
+    const ORGL=[...new Set([...s.tbl.org.map(r=>r[0]),...ORGS])],PPL=[...new Set([...s.tbl.user.map(r=>r[0]),...PEOPLE])];
+    const open = r=>()=>this.set({sel:r.id});
+    const bars=(m,color)=>{const e=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,5),mx=e[0]?e[0][1]:1;return e.map(([l,n],i)=>({l,n:color==='amt'?fm(n).replace('.00',''):n,w:Math.max(4,n/mx*100)+'%',c:PAL[i%5]}));};
+    const tally=(a,k,f)=>a.reduce((m,r)=>{m[r[k]]=(m[r[k]]||0)+(f?f(r):1);return m;},{});
+    const kpis=[{l:'หนังสือออก',v:fo.length,s:'เลขถัดไป '+this.nextOf('out','29/10/2569').no,c:'var(--p)'},{l:'หนังสือรับเข้า',v:fi.length,s:'เลขถัดไป '+this.nextOf('in','29/10/2569').no,c:'#9333EA'},{l:'รอดำเนินการ',v:cnt(s.out)+cnt(s.inn),s:'ร่าง ลงนาม รอผู้รับผิดชอบ',c:'#3B82F6'},{l:'ส่งคืนแก้ไข',v:all.filter(r=>r.st==='return').length,s:'ต้องวนกลับไปแก้ไข',c:'#F59E0B'}];
+    const followUps=all.filter(r=>['return','sign','wait'].includes(r.st)).slice(0,6).map(r=>({no:r.no,subj:r.subj.slice(0,60)+(r.subj.length>60?'…':''),st:ST[r.st][0],bg:ST[r.st][1],fg:ST[r.st][2],open:open(r)}));
+    // lists
+    let src=isOut?fo:fi;
+    const q=s.q.trim();
+    let list=src.filter(r=>(s.st==='all'||r.st===s.st)&&(s.dept==='ทั้งหมด'||r.a===s.dept||r.b===s.dept)&&(!q||(r.no+r.subj+r.a+r.b+r.who).includes(q)));
+    const srt=list.map((r,i)=>[r,i]).sort((x,y)=>{const a=this.pd(x[0].date),b=this.pd(y[0].date);return (b.y*10000+b.m*100+b.d)-(a.y*10000+a.m*100+a.d)||y[1]-x[1];}).map(x=>x[0]);
+    const tot=srt.length,ps=Number(s.ps),pages=Math.max(1,Math.ceil(tot/ps)),pg=Math.min(s.pg,pages);
+    const pw=[];for(let i=1;i<=pages;i++){if(i===1||i===pages||Math.abs(i-pg)<=1)pw.push(i);else if(pw[pw.length-1]!=='…')pw.push('…');}
+    const pageBtns=pw.map(i=>({l:i,go:()=>i!=='…'&&this.set({pg:i}),bg:i===pg?'var(--p)':'#fff',fg:i===pg?'#fff':'#334155',bd:i===pg?'var(--p)':'#CBD5E1',cur:i==='…'?'default':'pointer'}));
+    const hdr=['เลขที่','วันที่','จาก','ถึง/เลขหนังสือ','เรื่อง','จำนวนเงิน','ผู้ดำเนินการ','สถานะ'],rw=r=>[r.no,r.date,r.a,r.b,r.subj,r.amt,r.who,ST[r.st][0]];
+    const rows=srt.slice((pg-1)*ps,pg*ps).map(r=>({no:r.no,date:r.date,a:r.a,b:r.b,subj:r.subj,amt:fm(r.amt),who:r.who,st:ST[r.st][0],bg:ST[r.st][1],fg:ST[r.st][2],rowBg:r.st==='cancel'?'#FAFAFA':'#fff',open:open(r)}));
+    const sts=['all','draft','sign','return','wait','done','cancel'].filter(k=>k==='all'||src.some(r=>r.st===k));
+    const chips=sts.map(k=>({l:k==='all'?'ทั้งหมด':ST[k][0],n:k==='all'?src.length:src.filter(r=>r.st===k).length,go:()=>this.set({st:k,pg:1}),bg:s.st===k?'var(--p)':'#fff',fg:s.st===k?'#fff':'#334155',bd:s.st===k?'var(--p)':'#CBD5E1'}));
+    const deptOpts=['ทั้งหมด',...new Set(src.flatMap(r=>[r.a,r.b]))];
+    // board
+    const cols=[['draft','ร่าง / ตรวจสอบ','#64748B'],['sign','รอลงนาม','#3B82F6'],['return','ส่งคืนแก้ไข','#F59E0B'],['wait','รอผู้รับผิดชอบ','#9333EA'],['done','ดำเนินการแล้ว','#10B981']];
+    const board=cols.map(([k,l,c])=>{const it=all.filter(r=>r.st===k).slice(0,k==='done'?4:8);return{l,c,n:all.filter(r=>r.st===k).length,items:it.map(r=>({no:r.no,subj:r.subj.slice(0,70)+(r.subj.length>70?'…':''),who:r.who,date:r.date,open:open(r)}))};});
+    // detail
+    const c=this.cur(); let d=null;
+    if(c){const idx={draft:0,sign:1,return:0,wait:0,done:4,cancel:2}[c.st];const out=c.kind==='out';
+      d={no:c.no,subj:c.subj,note:c.note,whoLabel:out?'ผู้ลงชื่อ':'ผู้รับ',aLabel:out?'จาก':'จากหน่วยงาน',bLabel:out?'ถึง':'เลขหนังสือต้นทาง',advLabel:c.st==='done'?'ปิดเรื่อง / เก็บเข้าแฟ้ม':c.st==='sign'?'บันทึกลงนามแล้ว':'ส่งต่อขั้นถัดไป',
+      fields:[{l:'ประเภท',v:out?'หนังสือออก':'หนังสือรับเข้า'},{l:'วันที่',v:c.date},{l:out?'จาก':'จากหน่วยงาน',v:c.a},{l:out?'ถึง':'เลขหนังสือต้นทาง',v:c.b},{l:'จำนวนเงิน',v:fm(c.amt)+(c.amt?' บาท':'')},{l:out?'ผู้ลงชื่อ':'ผู้รับ',v:c.who},...(out?[{l:'หมวดเรื่อง',v:c.cat}]:[{l:'ผู้ดำเนินการ',v:c.handler||'-'}]),{l:'สถานะ',v:ST[c.st][0]},...(c.edited?[{l:'แก้ไขล่าสุด',v:c.edited+' โดย สาริณี'}]:[])],
+      steps:STEPS.map((l,i)=>{const done=c.st==='done'||i<idx,now=i===idx&&c.st!=='done'&&c.st!=='cancel';const bad=c.st==='return'&&i===0;return{l:bad?'ร่าง/ตรวจสอบ (ส่งคืนแก้ไข รอบที่ 1)':l,mark:done?'✓':bad?'↺':now?'●':'',bg:bad?'#F59E0B':done?'#10B981':now?'var(--p)':'#CBD5E1',fg:done||now||bad?'#0F172A':'#94A3B8',d:done?c.date:now?'อยู่ในขั้นตอนนี้ · '+c.who:bad?'วนกลับมาแก้ไขตามหมายเหตุ':'รอ'};})};}
+    const form=s.form, nextNo=s.modal?this.nextOf(s.modal,s.form.date).no:'';
+    const amtByCat=bars(tally(fo,'cat',r=>r.amt),'amt');
+    const T=s.setTab, tb=TBL[T];
+    const toggles=(arr,pf)=>arr.map(([l,on,d],i)=>{const k=pf+i,v=s.tg[k]===undefined?on:s.tg[k];return{l,d,bg:v?'var(--p)':'#CBD5E1',side:v?'right':'left',tog:()=>this.setState(x=>({tg:{...x.tg,[k]:!v}}))};});
+    const dm={};s.out.forEach(r=>{dm[r.no]=(dm[r.no]||0)+1;});
+    const dups=Object.entries(dm).filter(([k,v])=>v>1);
+    const byY={};s.out.forEach(r=>{const x=r.no.match(/(\d+)\/(\d+)/);if(x&&+x[2]>=2560&&+x[2]<=2575)(byY[x[2]]=byY[x[2]]||new Set()).add(+x[1]);});
+    const gaps=[];Object.entries(byY).forEach(([y,set])=>{if(set.size<100)return;let mx=0;set.forEach(v=>{if(v>mx)mx=v;});for(let i=1;i<=mx;i++)if(!set.has(i))gaps.push(String(i).padStart(3,'0')+'/'+y);});
+    const chkItems=[...(dups.length?[{t:'เลขซ้ำ',txt:dups.slice(0,4).map(([k,v])=>k+' ('+v+' ครั้ง)').join(', ')+(dups.length>4?' และอีก '+(dups.length-4)+' เลข':''),bg:'#FFFBEB',bd:'#FDE68A'}]:[]),...(gaps.length?[{t:'เลขข้าม',txt:gaps.length+' เลขไม่มีรายการ เช่น '+gaps.slice(0,5).join(', ')+' ต้องบันทึกเหตุผล',bg:'#FEF2F2',bd:'#FECACA'}]:[]),...((!dups.length&&!gaps.length)?[{t:'ปกติ',txt:'ไม่พบเลขซ้ำหรือเลขข้าม',bg:'#ECFDF5',bd:'#A7F3D0'}]:[])];
+    const chkSub='ตรวจจากข้อมูลทุกปี · เลขซ้ำ '+dups.length+' เลข · เลขข้าม '+gaps.length+' เลข';
+    const mk=(l,f,file)=>({l,xl:()=>this.csv(f(),file),pdf:()=>{this.toast('เปิดหน้าพิมพ์ เลือกบันทึกเป็น PDF');setTimeout(()=>window.print(),300);}});
+    const dupRows=()=>{const m={};s.out.forEach(r=>{(m[r.no]=m[r.no]||[]).push(r);});return [['เลขที่','จำนวนครั้ง','เรื่อง'],...Object.entries(m).filter(([k,v])=>v.length>1).map(([k,v])=>[k,v.length,v.map(r=>r.subj).join(' | ')])];};
+    const cfgCards=['out','in'].map(t=>{const c=s.cfg[t],st=(k,v)=>this.setState(x=>({cfg:{...x.cfg,[t]:{...x.cfg[t],[k]:v}}})),ys=Object.keys(c.cnt).map(Number).sort((a,b)=>b-a);
+      return{title:t==='out'?'เลขหนังสือออก':'เลขทะเบียนรับเข้า',sub:t==='out'?'ใช้ตอนกด "ออกเลข กบ."':'ใช้ตอนกด "รับหนังสือเข้า"',prefix:c.prefix,setPrefix:e=>st('prefix',e.target.value),digits:String(c.digits),setDigits:e=>st('digits',Number(e.target.value)),yfmt:c.yfmt,setYfmt:e=>st('yfmt',e.target.value),reset:c.reset,setReset:e=>st('reset',e.target.value),
+        sample:this.fmtNo(c,c.cnt[ys[0]]||1,ys[0]),
+        years:ys.map(y=>({lbl:(c.reset==='fy'?'ปีงบประมาณ ':'ปี ')+y,next:String(c.cnt[y]),setNext:e=>st('cnt',{...c.cnt,[y]:Math.max(1,parseInt(e.target.value)||1)}),ex:this.fmtNo(c,c.cnt[y],y)})),
+        addYear:()=>{const y=Math.max(...ys)+1;st('cnt',{...c.cnt,[y]:1});this.toast('เพิ่มปี '+y+' เริ่มเลขที่ 1');}};});
+    return {
+      th:THEMES.find(x=>x.id===s.theme)||THEMES[0],themeOpen:s.themeOpen,openTheme:()=>this.set({themeOpen:true}),closeTheme:()=>this.set({themeOpen:false}),
+      themes:THEMES.map(t=>({...t,bd:t.id===s.theme?t.p:'#E2E8F0',go:()=>{try{localStorage.setItem('thamc-theme',t.id);}catch(e){}this.set({theme:t.id,themeOpen:false});this.toast('เปลี่ยนเป็นธีม '+t.name);}})),
+      chkItems,chkSub,loading:s.loading,s_db:T==='db',
+      dbUrl:s.db.url,dbToken:s.db.token,dbMsg:s.db.msg,dbDot:s.db.ok?'#10B981':'#94A3B8',dbAutoBg:s.db.auto?'var(--p)':'#CBD5E1',dbAutoSide:s.db.auto?'right':'left',
+      setDbUrl:e=>this.dbSet({url:e.target.value.trim()}),setDbToken:e=>this.dbSet({token:e.target.value}),togDbAuto:()=>this.dbSet({auto:!s.db.auto}),
+      dbTest:()=>this.dbTest(),dbBulk:()=>this.dbBulk(),dbPull:()=>this.dbPull(),dbCopyCode:()=>this.dbCopyCode(),
+      dbSheets:(()=>{const fys=[...new Set([...s.out,...s.inn].map(r=>this.fyOf(r.date)).concat([this.curFy()]))].sort((a,b)=>b-a);return fys.flatMap(fy=>['out','in'].map(k=>{const name=(k==='out'?'ออก':'รับ')+' FY'+fy,n=(k==='out'?s.out:s.inn).filter(r=>this.fyOf(r.date)===fy).length,has=s.db.sheets?s.db.sheets.includes(name):null;return{name,n:n.toLocaleString('th-TH'),st:has===null?'ยังไม่ตรวจสอบ':has?'มีชีทแล้ว':'ยังไม่มีชีท',bg:has===null?'#F1F5F9':has?'#D1FAE5':'#FEF3C7',fg:has===null?'#475569':has?'#047857':'#B45309'};}));})(),
+      yrShow:(p==='set'||p==='admin')?'none':'flex',yrOpts,yr:s.yr,setYr:e=>this.set({yr:e.target.value,pg:1}),modeFy:()=>this.set({yrMode:'fy',yr:'all',pg:1}),modeCal:()=>this.set({yrMode:'cal',yr:'all',pg:1}),fyBg:s.yrMode==='fy'?'var(--p)':'#fff',fyFg:s.yrMode==='fy'?'#fff':'#334155',calBg:s.yrMode==='cal'?'var(--p)':'#fff',calFg:s.yrMode==='cal'?'#fff':'#334155',
+      pageBtns,ps:String(s.ps),setPs:e=>this.set({ps:Number(e.target.value),pg:1}),pgFrom:tot?(pg-1)*ps+1:0,pgTo:Math.min(tot,pg*ps),prevPg:()=>this.set({pg:Math.max(1,pg-1)}),nextPg:()=>this.set({pg:Math.min(pages,pg+1)}),prevOp:pg<=1?.4:1,nextOp:pg>=pages?.4:1,
+      exportCsv:()=>this.csv([hdr,...srt.map(rw)],(isOut?'ทะเบียนหนังสือออก':'ทะเบียนหนังสือรับเข้า')+'.csv'),
+      cfgCards,attachFile:()=>this.toast('ตัวอย่าง: ระบบจริงจะเปิดหน้าต่างเลือกไฟล์ PDF'),printReg:()=>{this.toast('เปิดหน้าพิมพ์');setTimeout(()=>window.print(),300);},
+      ioImport:()=>this.toast('ตัวอย่าง: เลือกไฟล์หรือลิงก์ Google Sheets เพื่อนำเข้า'),ioBackup:()=>{this.log('สำรองข้อมูล','สำรองทันที');this.toast('สำรองข้อมูลแล้ว');},ioClose:()=>{this.log('ปิดปี','ล็อกเลขรันปี 2568');this.toast('ล็อกเลขรันปี 2568 แล้ว');},
+      mFrom:s.modal==='in'?'หน่วยงานต้นเรื่อง':'จาก',mTo:s.modal==='in'?'เลขหนังสือต้นทาง':'ถึง',mSel:s.modal==='in'?'none':'flex',mTxt:s.modal==='in'?'flex':'none',fDate:e=>this.set({form:{...s.form,date:e.target.value}}),
+      nav,adminGroups,isAdmin:p==='admin'&&s.adminOk,stDisp:D(F.status),stCell:CD(F.status),amtCell:CD(F.amount),amtDisp:D(F.amount),attDisp:D(F.attach),secDisp:D(F.sec),chkDisp:D(F.check),title:titles[p],sideW:s.pres?'0px':'232px',chromeDisplay:s.pres?'none':'flex',presMode:s.pres,togglePres:()=>this.set({pres:!s.pres}),
+      q:s.q,setQ:e=>this.set({pg:1,q:e.target.value,page:(p==='dash'||p==='report'||p==='set'||p==='flow')?'out':p}),
+      openOut:()=>this.set({modal:'out',form:{a:'ฝ่ายการเงินและบัญชี',b:'รอง ผอ.ฝ่ายบริหาร',subj:'',amt:'',who:'สาริณี',date:'29/10/2569'}}),openIn:()=>this.set({modal:'in',form:{a:'สนับสนุนทั่วไป',b:'',subj:'',amt:'',who:'สาริณี',date:'29/10/2569'}}),
+      isDash:p==='dash',isList:isOut||isIn,isFlow:p==='flow',isReport:p==='report',isSet:p==='set',
+      kpis,catBars:bars(tally(fo,'cat')),orgBars:bars(tally(fi,'a')),followUps,
+      chips,deptOpts,dept:s.dept,setDept:e=>this.set({dept:e.target.value,pg:1}),rows,noRows:tot===0,rowCount:tot,colFrom:isIn?'หน่วยงานต้นเรื่อง':'จาก',colTo:isIn?'เลขหนังสือต้นทาง':'ถึง',colWho:s.modal==='in'?'ผู้รับ':'ผู้ลงชื่อ',board,
+      amtBars:amtByCat,reportList:[mk('ทะเบียนหนังสือออก',()=>[hdr,...fo.map(rw)],'ทะเบียนหนังสือออก.csv'),mk('ทะเบียนหนังสือรับเข้า',()=>[hdr,...fi.map(rw)],'ทะเบียนหนังสือรับเข้า.csv'),mk('เรื่องค้างดำเนินการ / ส่งคืนแก้ไข',()=>[hdr,...all.filter(r=>!['done','cancel'].includes(r.st)).map(rw)],'เรื่องค้าง.csv'),mk('ตรวจสอบเลขรันซ้ำ',dupRows,'ตรวจสอบเลขรัน.csv'),mk('สรุปยอดเงินตามหน่วยงาน',()=>[['หน่วยงาน','จำนวนเรื่อง','ยอดเงินรวม'],...Object.entries(all.reduce((m,r)=>{const k=r.a;m[k]=m[k]||[0,0];m[k][0]++;m[k][1]+=r.amt||0;return m;},{})).map(([k,v])=>[k,v[0],v[1]])],'สรุปยอดเงิน.csv'),mk('รายการยกเลิกเลข',()=>[hdr,...all.filter(r=>r.st==='cancel').map(rw)],'รายการยกเลิกเลข.csv')],
+      setTabs:Object.entries(SETS).filter(([k])=>!({flow:!F.status,notify:!F.notify,audit:!F.audit,sec:!F.sec})[k]).map(([k,v])=>({l:v[0],go:()=>this.set({setTab:k}),bg:T===k?'var(--pl)':'transparent',fg:T===k?'var(--pd)':'#334155',fw:T===k?600:400})),
+      setTitle:SETS[T][0],setSub:SETS[T][1],s_num:T==='num',s_table:!!tb,s_flow:T==='flow',s_notify:T==='notify',s_io:T==='io',
+      numToggles:toggles([['ล็อกเลขอัตโนมัติ ป้องกันเลขซ้ำ',true],['ไม่อนุญาตให้ข้ามเลข',true],['ต้องระบุเหตุผลเมื่อยกเลิกเลข',true],['เปิดให้แก้ไขเลขย้อนหลังได้',false]],'n'),
+      setHead:tb?tb[0]:[],addDisp:T==='audit'?'none':'inline-flex',addRow:()=>this.addRow(T),
+      setRows:tb?s.tbl[T].map((r,i)=>({c1:r[0],c2:r[1],c3:r[2],c4:r[3],e1:e=>this.editCell(T,i,0,e.target.value),e2:e=>this.editCell(T,i,1,e.target.value),e3:e=>this.editCell(T,i,2,e.target.value),del:()=>this.delRow(T,i),ed:T==='audit'?'none':'block',vw:T==='audit'?'block':'none',edF:T==='audit'?'none':'flex'})):[],
+      flowSteps:[['ร่าง','เจ้าหน้าที่สารบรรณบันทึกและแนบไฟล์','1 วัน'],['ตรวจสอบ','ผู้ตรวจตรวจความถูกต้อง ส่งคืนได้','1 วัน'],['ลงนาม','ผู้จัดการฝ่ายหรือผู้อำนวยการลงนาม','2 วัน'],['ออกเลข','ระบบออกเลข กบ และล็อก','ทันที'],['ส่ง/ดำเนินการ','ส่งหน่วยงานปลายทาง บันทึกผู้รับ','1 วัน'],['ปิดเรื่อง','เก็บเข้าแฟ้มและครบกำหนดอายุเก็บเอกสาร','-']].map((a,i)=>({i:i+1,l:a[0],d:a[1],sla:a[2]})),
+      notifyList:toggles([['เรื่องรอลงนามเกิน 2 วัน',true,'แจ้งผู้ลงนามและผู้ดำเนินการ'],['เรื่องถูกส่งคืนแก้ไข',true,'แจ้งผู้ดำเนินการเดิมทันที'],['หนังสือรับเข้าใหม่ที่ยังไม่มีผู้รับผิดชอบ',true,'แจ้งผู้จัดการฝ่าย'],['เลขรันผิดปกติ (ซ้ำ/ข้าม)',true,'แจ้งผู้ดูแลระบบ'],['สรุปรายวัน (อีเมล)',false,'ส่งเวลา 16:00 น.'],['แจ้งผ่าน LINE Notify',false,'เชื่อมกลุ่มงาน']],'t'),
+      pinOpen:s.pinOpen,pinVal:s.pinVal,pinBd:s.pinErr?'#EF4444':'#CBD5E1',pinMsgDisp:s.pinErr?'block':'none',
+      setPin:e=>this.set({pinVal:e.target.value,pinErr:false}),
+      closePin:()=>this.set({pinOpen:false}),
+      submitPin:()=>{ if(s.pinVal==='admin') this.set({adminOk:true,pinOpen:false,page:'admin',st:'all',q:''}); else this.set({pinErr:true,pinVal:''}); },
+      pinKey:e=>{ if(e.key==='Enter'){ if(e.target.value==='admin') this.set({adminOk:true,pinOpen:false,page:'admin',st:'all',q:''}); else this.set({pinErr:true,pinVal:''}); } },
+      editFlex:s.edit?'flex':'none',viewFlex:s.edit?'none':'flex',
+      peopleE:[...new Set([s.ef.who,...PPL].filter(Boolean))],orgOptsA:[...new Set([s.ef.a,...ORGL].filter(Boolean))],orgOptsB:[...new Set([s.ef.b,...ORGL].filter(Boolean))],bSel:(c&&c.kind==='out')?'flex':'none',bTxt:(c&&c.kind==='out')?'none':'flex',
+      editDisp:s.edit?'grid':'none',viewDisp:s.edit?'none':'grid',viewBlock:s.edit?'none':'block',advDisp:(s.edit||!F.status)?'none':'flex',ef:s.ef,
+      startEdit:()=>this.set({edit:true,ef:{date:c.date,a:c.a,b:c.b,subj:c.subj,amt:c.amt?String(c.amt):'',who:c.who,note:c.note==='-'?'':c.note}}),
+      cancelEdit:()=>this.set({edit:false}),
+      eDate:e=>this.set({ef:{...s.ef,date:e.target.value}}),eWho:e=>this.set({ef:{...s.ef,who:e.target.value}}),eA:e=>this.set({ef:{...s.ef,a:e.target.value}}),eB:e=>this.set({ef:{...s.ef,b:e.target.value}}),eSubj:e=>this.set({ef:{...s.ef,subj:e.target.value}}),eAmt:e=>this.set({ef:{...s.ef,amt:e.target.value}}),eNote:e=>this.set({ef:{...s.ef,note:e.target.value}}),
+      saveEdit:()=>{const f=s.ef,amt=parseFloat((f.amt||'0').replace(/,/g,''))||0;this.upd(c.id,r=>({...r,date:f.date,a:f.a,b:f.b,subj:f.subj||r.subj,amt,who:f.who,note:f.note||'-',edited:'29/10/2569'}));this.set({edit:false});this.log('แก้ไข',c.no);this.toast('บันทึกการแก้ไข '+c.no+' แล้ว');},
+      copyNo:()=>this.copy(c.no,'คัดลอกเลขที่แล้ว: '+c.no),copySubj:()=>this.copy(c.subj,'คัดลอกชื่อเรื่องแล้ว'),
+      sel:!!c,d,closeSel:()=>this.set({sel:null,edit:false}),
+      advance:()=>{const nx={draft:'sign',sign:'done',return:'sign',wait:'draft',done:'done'}[c.st];this.upd(c.id,r=>({...r,st:nx}));this.set({sel:null});this.log('ส่งต่อ',c.no+' → '+ST[nx][0]);this.toast('บันทึกแล้ว: '+c.no+' → '+ST[nx][0]);},
+      sendBack:()=>{this.upd(c.id,r=>({...r,st:'return',note:'ส่งคืนแก้ไข: รอบใหม่ (วนกลับไปขั้นร่าง)'}));this.set({sel:null});this.toast('ส่งคืนแก้ไข '+c.no+' วนกลับขั้นร่าง');},
+      cancelDoc:()=>{this.upd(c.id,r=>({...r,st:'cancel',note:'ยกเลิกเลข ต้องระบุเหตุผลในบันทึก'}));this.set({sel:null});this.log('ยกเลิกเลข',c.no);this.toast('ยกเลิก '+c.no);},
+      modal:!!s.modal,mTitle:s.modal==='in'?'รับหนังสือเข้า':'ออกเลขหนังสือ กบ.',nextNo,form,orgOpts:ORGL,people:PPL,
+      fA:e=>this.set({form:{...s.form,a:e.target.value}}),fB:e=>this.set({form:{...s.form,b:e.target.value}}),fSubj:e=>this.set({form:{...s.form,subj:e.target.value}}),fAmt:e=>this.set({form:{...s.form,amt:e.target.value}}),fWho:e=>this.set({form:{...s.form,who:e.target.value}}),
+      closeModal:()=>this.set({modal:null}),
+      saveDoc:()=>{const f=s.form,m=s.modal;
+        if(!(f.subj||'').trim()){this.toast('กรุณาระบุเรื่อง');return;}
+        if(!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(f.date||'')){this.toast('รูปแบบวันที่ต้องเป็น วว/ดด/พ.ศ. เช่น 29/10/2569');return;}
+        const amt=parseFloat((f.amt||'0').replace(/,/g,''))||0,nx=this.nextOf(m,f.date),nid=(m==='out'?'o':'i')+Date.now();
+        const base={subj:f.subj.trim(),amt,who:f.who,date:f.date,a:f.a,b:f.b||'-',st:'draft',note:'-'};
+        const cfg={...s.cfg,[m]:{...s.cfg[m],cnt:{...s.cfg[m].cnt,[nx.yk]:nx.n+1}}};
+        if(m==='out')this.set({out:[{...base,id:nid,kind:'out',no:nx.no,cat:'อื่นๆ'},...s.out],cfg,modal:null,page:'out',st:'all',pg:1,yr:'all'});
+        else this.set({inn:[{...base,id:nid,kind:'in',no:nx.no,ref:base.b,handler:''},...s.inn],cfg,modal:null,page:'in',st:'all',pg:1,yr:'all'});
+        this.log(m==='out'?'ออกเลข':'รับเข้า',nx.no);setTimeout(()=>this.dbPush(nid),60);this.toast('บันทึกแล้ว ได้เลขที่ '+nx.no);},
+      toast:s.toast
+    };
+  }
+}
+</script>
+</body>
+</html>
