@@ -449,7 +449,8 @@ const TBL = {
 };
 class Component extends DCLogic {
   componentDidMount(){ try{const t=localStorage.getItem('thamc-theme');if(t&&THEMES.some(x=>x.id===t))this.setState({theme:t});}catch(e){}
-    try{const d=JSON.parse(localStorage.getItem('thamc-db')||'null');if(d)this.setState(x=>({db:{...x.db,...d}}),()=>{if(this.state.db.url)this.dbTest();});}catch(e){}
+    let d=null;try{d=JSON.parse(localStorage.getItem('thamc-db')||'null');}catch(e){}
+    this.setState(x=>({db:{...x.db,...(d&&d.url?{url:d.url}:{}),...(d&&d.token?{token:d.token}:{}),...(d&&typeof d.auto==='boolean'?{auto:d.auto}:{})}}),()=>{if(this.state.db.url)this.dbTest();});
     fetch('data.json').then(r=>r.json()).then(d=>this.loadData(d)).catch(()=>this.setState({loading:false})); }
   loadData(d){
     const ym=n=>{const x=String(n).match(/(\d+)\/(\d+)/);if(!x)return null;let y=+x[2];if(y<100)y+=2500;return [y,+x[1]];};
@@ -459,7 +460,7 @@ class Component extends DCLogic {
     this.setState(s=>({out,inn,loading:false,cfg:{out:{...s.cfg.out,cnt:{...s.cfg.out.cnt,...nx(d.out)}},in:{...s.cfg.in,cnt:{...s.cfg.in.cnt,...nx(d.inn)}}}}));
     this.toast('นำเข้าข้อมูลแล้ว: หนังสือออก '+out.length.toLocaleString('th-TH')+' · หนังสือรับเข้า '+inn.length.toLocaleString('th-TH')+' รายการ');
   }
-  state = {db:{url:'',token:'',auto:true,ok:false,sheets:null,msg:'ยังไม่ได้เชื่อมต่อ'},theme:'teal',themeOpen:false,adminOk:false,pinOpen:false,pinVal:'',pinErr:false,edit:false,ef:{},page:'dash',q:'',st:'all',dept:'ทั้งหมด',sel:null,modal:null,pres:false,setTab:'num',toast:'',out:[],inn:[],loading:true,form:{a:'ฝ่ายการเงินและบัญชี',b:'รอง ผอ.ฝ่ายบริหาร',subj:'',amt:'',who:'สาริณี'},cfg:{out:{prefix:'กบ ',digits:3,yfmt:'full',reset:'cal',cnt:{2568:123,2569:98}},in:{prefix:'กบ.',digits:2,yfmt:'short',reset:'cal',cnt:{2568:105,2569:99}}},tbl:Object.fromEntries(Object.entries(TBL).map(([k,v])=>[k,v[1].map(r=>[...r])])),tg:{},yrMode:'fy',yr:'all',pg:1,ps:10,feat:{flow:false,status:false,report:true,attach:true,amount:true,sec:false,check:true,notify:false,audit:true},setOn:{0:true,1:true,2:true,3:false}};
+  state = {db:{url:'https://script.google.com/macros/s/AKfycbysrAs5fndYBbdAkqAuUipU5zz3LkCm36UDM03GLbMK_dAva-S_HyfQgJWKG83nISY8/exec',token:'thamc-sarabun',auto:true,ok:false,sheets:null,msg:'ยังไม่ได้เชื่อมต่อ'},theme:'teal',themeOpen:false,adminOk:false,pinOpen:false,pinVal:'',pinErr:false,edit:false,ef:{},page:'dash',q:'',st:'all',dept:'ทั้งหมด',sel:null,modal:null,pres:false,setTab:'num',toast:'',out:[],inn:[],loading:true,form:{a:'ฝ่ายการเงินและบัญชี',b:'รอง ผอ.ฝ่ายบริหาร',subj:'',amt:'',who:'สาริณี'},cfg:{out:{prefix:'กบ ',digits:3,yfmt:'full',reset:'cal',cnt:{2568:123,2569:98}},in:{prefix:'กบ.',digits:2,yfmt:'short',reset:'cal',cnt:{2568:105,2569:99}}},tbl:Object.fromEntries(Object.entries(TBL).map(([k,v])=>[k,v[1].map(r=>[...r])])),tg:{},yrMode:'fy',yr:'all',pg:1,ps:10,feat:{flow:false,status:false,report:true,attach:true,amount:true,sec:false,check:true,notify:false,audit:true},setOn:{0:true,1:true,2:true,3:false}};
   set = o => this.setState(o);
   toast = m => { this.setState({toast:m}); setTimeout(()=>this.setState({toast:''}),2200); };
   copy = (t,m) => { const done=()=>this.toast(m); try{navigator.clipboard.writeText(t).then(done,()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();done();});}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();done();} };
