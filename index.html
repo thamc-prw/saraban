@@ -23,10 +23,12 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>body{margin:0;background:#F8FAFC;font-family:'IBM Plex Sans Thai',sans-serif;color:#0F172A}a{color:#0D9488}a:hover{color:#0F766E}*{box-sizing:border-box}input,select,textarea,button{font-family:inherit}</style>
+<style>body{margin:0;background:#F8FAFC;font-family:'IBM Plex Sans Thai',sans-serif;color:#0F172A}a{color:#0D9488}a:hover{color:#0F766E}*{box-sizing:border-box}@media print{div>aside:first-child,main>header{display:none!important}}input,select,textarea,button{font-family:inherit}</style>
 </helmet>
 <div style="--p:{{ th.p }};--pd:{{ th.pd }};--pl:{{ th.pl }};--pl2:{{ th.pl2 }};--pb:{{ th.pb }};display:flex;min-height:100vh;background:#F8FAFC;font-size:14px;line-height:1.5">
 
+<datalist id="dl-org"><sc-for list="{{ orgOpts }}" as="o" hint-placeholder-count="2"><option value="{{ o }}"></option></sc-for></datalist>
+<datalist id="dl-ppl"><sc-for list="{{ people }}" as="o" hint-placeholder-count="2"><option value="{{ o }}"></option></sc-for></datalist>
 <!-- SIDEBAR -->
 <aside style="width:{{ sideW }};flex:none;background:#fff;border-right:1px solid #E2E8F0;display:{{ chromeDisplay }};flex-direction:column;position:sticky;top:0;height:100vh">
   <div style="padding:20px 20px 16px;display:flex;gap:12px;align-items:center">
@@ -42,8 +44,8 @@
     </sc-for>
   </nav>
   <div style="padding:16px;border-top:1px solid #E2E8F0;display:flex;gap:10px;align-items:center">
-    <div style="width:34px;height:34px;border-radius:99px;background:#9333EA;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600">ส</div>
-    <div style="flex:1"><div style="font-weight:500">สาริณี</div><div style="font-size:12px;color:#64748B">เจ้าหน้าที่สารบรรณ</div></div>
+    <div style="width:34px;height:34px;flex:none;border-radius:10px;background:var(--pl2);color:var(--pd);display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"></path></svg></div>
+    <div style="flex:1;min-width:0"><div style="font-size:12px;color:#64748B">พัฒนาโดย</div><div style="font-weight:600">sawarin</div></div>
   </div>
 </aside>
 
@@ -128,7 +130,7 @@
     <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;overflow:auto">
       <table style="width:100%;border-collapse:collapse;min-width:900px">
         <thead><tr style="background:#F8FAFC;text-align:left;color:#475569;font-size:12px">
-          <th style="padding:12px 16px;font-weight:600">เลขที่</th><th style="padding:12px 8px;font-weight:600">วันที่</th><th style="padding:12px 8px;font-weight:600">{{ colFrom }}</th><th style="padding:12px 8px;font-weight:600">{{ colTo }}</th><th style="padding:12px 8px;font-weight:600;width:34%">เรื่อง</th><th style="display:{{ amtCell }};padding:12px 8px;font-weight:600;text-align:right">จำนวนเงิน</th><th style="padding:12px 8px;font-weight:600">ผู้ดำเนินการ</th><th style="display:{{ stCell }};padding:12px 16px;font-weight:600">สถานะ</th>
+          <th onClick="{{ hd.no.go }}" style="padding:12px 16px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#F1F5F9">เลขที่ <span style="opacity:{{ hd.no.op }};font-size:10px">{{ hd.no.ar }}</span></th><th onClick="{{ hd.date.go }}" style="padding:12px 8px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#F1F5F9">วันที่ <span style="opacity:{{ hd.date.op }};font-size:10px">{{ hd.date.ar }}</span></th><th onClick="{{ hd.a.go }}" style="padding:12px 8px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#F1F5F9">{{ colFrom }} <span style="opacity:{{ hd.a.op }};font-size:10px">{{ hd.a.ar }}</span></th><th onClick="{{ hd.b.go }}" style="padding:12px 8px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#F1F5F9">{{ colTo }} <span style="opacity:{{ hd.b.op }};font-size:10px">{{ hd.b.ar }}</span></th><th onClick="{{ hd.subj.go }}" style="padding:12px 8px;font-weight:600;width:34%;cursor:pointer" style-hover="background:#F1F5F9">เรื่อง <span style="opacity:{{ hd.subj.op }};font-size:10px">{{ hd.subj.ar }}</span></th><th onClick="{{ hd.amt.go }}" style="display:{{ amtCell }};padding:12px 8px;font-weight:600;text-align:right;cursor:pointer;white-space:nowrap" style-hover="background:#F1F5F9">จำนวนเงิน <span style="opacity:{{ hd.amt.op }};font-size:10px">{{ hd.amt.ar }}</span></th><th onClick="{{ hd.who.go }}" style="padding:12px 8px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#F1F5F9">ผู้ดำเนินการ <span style="opacity:{{ hd.who.op }};font-size:10px">{{ hd.who.ar }}</span></th><th onClick="{{ hd.st.go }}" style="display:{{ stCell }};padding:12px 16px;font-weight:600;cursor:pointer;white-space:nowrap" style-hover="background:#F1F5F9">สถานะ <span style="opacity:{{ hd.st.op }};font-size:10px">{{ hd.st.ar }}</span></th>
         </tr></thead>
         <tbody>
           <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
@@ -144,7 +146,7 @@
           </sc-for>
         </tbody>
       </table>
-      <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}"><div style="padding:40px;text-align:center;color:#64748B">ไม่พบรายการตามเงื่อนไข</div></sc-if>
+      <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}"><div style="padding:40px;text-align:center;color:#64748B">{{ emptyMsg }}</div></sc-if>
     </div>
     <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:13px;color:#64748B">
       <span>แสดง {{ pgFrom }}–{{ pgTo }} จาก {{ rowCount }} รายการ · คลิกแถวเพื่อดูรายละเอียด</span>
@@ -276,6 +278,19 @@
           <sc-for list="{{ notifyList }}" as="t" hint-placeholder-count="6"><div onClick="{{ t.tog }}" style="display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid #F1F5F9;cursor:pointer"><div style="flex:1"><div>{{ t.l }}</div><div style="font-size:12px;color:#64748B">{{ t.d }}</div></div><div style="width:40px;height:22px;border-radius:99px;background:{{ t.bg }};position:relative"><div style="position:absolute;top:2px;{{ t.side }}:2px;width:18px;height:18px;border-radius:99px;background:#fff"></div></div></div></sc-for>
         </sc-if>
 
+        <sc-if value="{{ s_fields }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:12px 14px;border-radius:10px;background:var(--pl);border:1px solid var(--pb);font-size:13px">เลือกว่าแต่ละช่องในฟอร์มออกเลข/รับหนังสือ จะให้เลือกจากรายการมาสเตอร์ พิมพ์เองได้ หรือทั้งสองอย่าง ค่าที่พิมพ์ใหม่จะถูกจำเข้ามาสเตอร์ให้ทุกคนใช้ร่วมกัน (เพิ่ม/ลบรายการเองได้ที่ ตั้งค่า > หน่วยงาน และ ผู้ใช้และสิทธิ์)</div>
+          <sc-for list="{{ fmCards }}" as="fc" hint-placeholder-count="3">
+            <div style="border:1px solid #E2E8F0;border-radius:12px;padding:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:center">
+              <div><b>{{ fc.title }}</b><div style="font-size:12px;color:#64748B">{{ fc.sub }}</div><div style="font-size:12px;color:var(--pd);margin-top:2px">มาสเตอร์ {{ fc.count }} รายการ</div></div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <select value="{{ fc.mode }}" onChange="{{ fc.setMode }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><option value="select">เลือกจากรายการเท่านั้น (ดรอปดาว)</option><option value="both">เลือกจากรายการ หรือพิมพ์เองได้</option><option value="text">พิมพ์เองอย่างเดียว</option></select>
+                <div onClick="{{ fc.togLearn }}" style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px"><div style="width:40px;height:22px;flex:none;border-radius:99px;background:{{ fc.bg }};position:relative"><div style="position:absolute;top:2px;{{ fc.side }}:2px;width:18px;height:18px;border-radius:99px;background:#fff"></div></div><span>จำค่าที่พิมพ์ใหม่เข้ามาสเตอร์อัตโนมัติ</span></div>
+              </div>
+            </div>
+          </sc-for>
+        </sc-if>
+
         <sc-if value="{{ s_db }}" hint-placeholder-val="{{ false }}">
           <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;background:#F8FAFC;border:1px solid #E2E8F0"><span style="width:10px;height:10px;border-radius:99px;background:{{ dbDot }}"></span><span style="flex:1;font-size:14px">{{ dbMsg }}</span></div>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
@@ -304,9 +319,9 @@
 
         <sc-if value="{{ s_io }}" hint-placeholder-val="{{ false }}">
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px">
-            <div style="border:1px solid #E2E8F0;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px"><b>นำเข้าจาก Google Sheets</b><span style="font-size:13px;color:#64748B">เชื่อมไฟล์ "เอกสารรับเข้า-ออกเลขกบ.THAMC" แท็บ หนังสือออกเลข กบ. / หนังสือรับเข้า ปี 2568–2569 ตรวจแถวซ้ำก่อนนำเข้า</span><button onClick="{{ ioImport }}" style="align-self:flex-start;padding:8px 14px;border:0;background:var(--p);color:#fff;border-radius:8px;cursor:pointer">เลือกไฟล์ / ลิงก์</button></div>
-            <div style="border:1px solid #E2E8F0;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px"><b>สำรองข้อมูล</b><span style="font-size:13px;color:#64748B">สำรองอัตโนมัติทุกวัน 02:00 น. เก็บย้อนหลัง 30 วัน · ล่าสุด 29 ต.ค. 2569 02:00</span><button onClick="{{ ioBackup }}" style="align-self:flex-start;padding:8px 14px;border:1px solid #CBD5E1;background:#fff;border-radius:8px;cursor:pointer">สำรองทันที</button></div>
-            <div style="border:1px solid #E2E8F0;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px"><b>เก็บเอกสาร</b><span style="font-size:13px;color:#64748B">ปิดปี: ล็อกเลขรันปี 2568 ไม่ให้แก้ไข และเก็บถาวร</span><button onClick="{{ ioClose }}" style="align-self:flex-start;padding:8px 14px;border:1px solid #CBD5E1;background:#fff;border-radius:8px;cursor:pointer">ปิดปี 2568</button></div>
+            <div style="border:1px solid #E2E8F0;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px"><b>นำเข้าจากไฟล์ CSV</b><span style="font-size:13px;color:#64748B">เลือกไฟล์ CSV ที่ส่งออกจากระบบ (หัวคอลัมน์เดียวกัน) ระบบข้ามเลขที่ซ้ำให้</span><label style="align-self:flex-start;padding:8px 14px;background:var(--p);color:#fff;border-radius:8px;cursor:pointer">เลือกไฟล์ CSV<input type="file" accept=".csv" onChange="{{ ioImport }}" style="display:none"></label></div>
+            <div style="border:1px solid #E2E8F0;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px"><b>สำรองข้อมูล</b><span style="font-size:13px;color:#64748B">ดาวน์โหลดข้อมูลทั้งหมดเป็นไฟล์ JSON เก็บไว้เอง (ข้อมูลบน Google Sheets มีประวัติเวอร์ชันของ Google อยู่แล้ว)</span><button onClick="{{ ioBackup }}" style="align-self:flex-start;padding:8px 14px;border:1px solid #CBD5E1;background:#fff;border-radius:8px;cursor:pointer">ดาวน์โหลดสำรอง</button></div>
+            <div style="border:1px solid #E2E8F0;border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px"><b>เก็บเอกสาร</b><span style="font-size:13px;color:#64748B">{{ closeNote }}</span><button onClick="{{ ioClose }}" style="align-self:flex-start;padding:8px 14px;border:1px solid #CBD5E1;background:#fff;border-radius:8px;cursor:pointer">{{ closeLabel }}</button></div>
           </div>
         </sc-if>
       </div>
@@ -335,9 +350,9 @@
       <div style="display:{{ editDisp }};grid-template-columns:1fr 1fr;gap:12px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;padding:16px 18px;font-size:13px">
         <div style="grid-column:1/-1;font-weight:600;color:#B45309">แก้ไขข้อมูล (เลขที่ {{ d.no }} ไม่สามารถแก้ไขได้)</div>
         <label style="display:flex;flex-direction:column;gap:4px">วันที่<input value="{{ ef.date }}" onChange="{{ eDate }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"></label>
-        <label style="display:flex;flex-direction:column;gap:4px">{{ d.whoLabel }}<select value="{{ ef.who }}" onChange="{{ eWho }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><sc-for list="{{ peopleE }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
-        <label style="display:flex;flex-direction:column;gap:4px">{{ d.aLabel }}<select value="{{ ef.a }}" onChange="{{ eA }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><sc-for list="{{ orgOptsA }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
-        <label style="display:{{ bSel }};flex-direction:column;gap:4px">{{ d.bLabel }}<select value="{{ ef.b }}" onChange="{{ eB }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><sc-for list="{{ orgOptsB }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+        <label style="display:flex;flex-direction:column;gap:4px">{{ d.whoLabel }}<input list="{{ fl.who.list }}" value="{{ ef.who }}" onChange="{{ eWho }}" style="display:{{ fl.who.inp }};padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><select value="{{ ef.who }}" onChange="{{ eWho }}" style="display:{{ fl.who.sel }};padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><sc-for list="{{ peopleE }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+        <label style="display:flex;flex-direction:column;gap:4px">{{ d.aLabel }}<input list="{{ fl.a.list }}" value="{{ ef.a }}" onChange="{{ eA }}" style="display:{{ fl.a.inp }};padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><select value="{{ ef.a }}" onChange="{{ eA }}" style="display:{{ fl.a.sel }};padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><sc-for list="{{ orgOptsA }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+        <label style="display:{{ bSel }};flex-direction:column;gap:4px">{{ d.bLabel }}<input list="{{ fl.b.list }}" value="{{ ef.b }}" onChange="{{ eB }}" style="display:{{ fl.b.inp }};padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><select value="{{ ef.b }}" onChange="{{ eB }}" style="display:{{ fl.b.sel }};padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"><sc-for list="{{ orgOptsB }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
         <label style="display:{{ bTxt }};flex-direction:column;gap:4px">{{ d.bLabel }}<input value="{{ ef.b }}" onChange="{{ eB }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;background:#fff"></label>
         <label style="grid-column:1/-1;display:flex;flex-direction:column;gap:4px">เรื่อง<textarea rows="2" value="{{ ef.subj }}" onChange="{{ eSubj }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;resize:vertical;background:#fff"></textarea></label>
         <label style="display:{{ amtDisp }};flex-direction:column;gap:4px">จำนวนเงิน (บาท)<input value="{{ ef.amt }}" onChange="{{ eAmt }}" style="padding:8px 10px;border:1px solid #CBD5E1;border-radius:8px;text-align:right;background:#fff"></label>
@@ -355,7 +370,8 @@
           </div>
         </sc-for>
       </div>
-      <div style="display:{{ attDisp }};flex-direction:column"><div style="font-weight:600;margin-bottom:8px">ไฟล์แนบ</div><div style="display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px dashed #CBD5E1;border-radius:8px;color:#64748B;font-size:13px"><span style="flex:1">แนบไฟล์สแกนหนังสือ (PDF) · ลากวางที่นี่</span><button onClick="{{ attachFile }}" style="padding:4px 10px;border:1px solid #CBD5E1;background:#fff;border-radius:6px;cursor:pointer" style-hover="background:#F1F5F9">เลือกไฟล์</button></div></div>
+      <div style="display:{{ attDisp }};flex-direction:column"><div style="font-weight:600;margin-bottom:8px">ไฟล์แนบ</div><sc-for list="{{ d.files }}" as="fi" hint-placeholder-count="1"><div style="display:flex;gap:10px;align-items:center;padding:8px 12px;border:1px solid #E2E8F0;border-radius:8px;margin-bottom:6px;font-size:13px"><a href="{{ fi.url }}" target="_blank" rel="noopener" style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ fi.name }}</a><span style="color:#94A3B8">{{ fi.size }}</span><button onClick="{{ fi.del }}" title="ลบไฟล์แนบ" aria-label="ลบไฟล์แนบ" style="border:0;background:#F1F5F9;border-radius:6px;width:24px;height:24px;cursor:pointer">✕</button></div></sc-for>
+        <label style="display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px dashed #CBD5E1;border-radius:8px;color:#64748B;font-size:13px;cursor:pointer" style-hover="background:#F8FAFC"><input type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx" onChange="{{ pickDrawer }}" style="display:none"><span style="flex:1">{{ upMsg }}</span><span style="padding:4px 10px;border:1px solid #CBD5E1;background:#fff;border-radius:6px">เลือกไฟล์</span></label></div>
       <div style="display:{{ viewBlock }}"><div style="font-weight:600;margin-bottom:8px">หมายเหตุ</div><div style="font-size:13px;color:#475569;padding:10px 12px;background:#F8FAFC;border-radius:8px">{{ d.note }}</div></div>
     </div>
     <div style="padding:16px 24px;border-top:1px solid #E2E8F0;display:flex;gap:8px;flex-wrap:wrap">
@@ -376,15 +392,15 @@
     <div style="background:#fff;border-radius:14px;width:640px;max-width:100%;max-height:92vh;overflow:auto;box-shadow:0 20px 50px rgba(15,23,42,.3)">
       <div style="padding:20px 24px;border-bottom:1px solid #E2E8F0;display:flex;align-items:center"><div style="flex:1"><div style="font-size:18px;font-weight:600">{{ mTitle }}</div><div style="font-size:13px;color:#64748B">เลขที่ที่จะได้รับ <b style="font-family:ui-monospace,monospace;color:var(--pd)">{{ nextNo }}</b> (ล็อกเลขอัตโนมัติเมื่อบันทึก)</div></div><button onClick="{{ closeModal }}" style="border:0;background:#F1F5F9;border-radius:8px;width:32px;height:32px;cursor:pointer">✕</button></div>
       <div style="padding:20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:14px">
-        <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">{{ mFrom }}<select value="{{ form.a }}" onChange="{{ fA }}" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"><sc-for list="{{ orgOpts }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">{{ mFrom }}<input list="{{ fl.a.list }}" value="{{ form.a }}" onChange="{{ fA }}" placeholder="พิมพ์หรือเลือก" style="display:{{ fl.a.inp }};padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"><select value="{{ form.a }}" onChange="{{ fA }}" style="display:{{ fl.a.sel }};padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"><sc-for list="{{ orgOpts }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
         <label style="display:{{ mTxt }};flex-direction:column;gap:4px;font-size:13px">{{ mTo }}<input value="{{ form.b }}" onChange="{{ fB }}" placeholder="เช่น ฝกน.059/68" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"></label>
-        <label style="display:{{ mSel }};flex-direction:column;gap:4px;font-size:13px">{{ mTo }}<select value="{{ form.b }}" onChange="{{ fB }}" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"><sc-for list="{{ orgOpts }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+        <label style="display:{{ mSel }};flex-direction:column;gap:4px;font-size:13px">{{ mTo }}<input list="{{ fl.b.list }}" value="{{ form.b }}" onChange="{{ fB }}" placeholder="พิมพ์หรือเลือก" style="display:{{ fl.b.inp }};padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"><select value="{{ form.b }}" onChange="{{ fB }}" style="display:{{ fl.b.sel }};padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"><sc-for list="{{ orgOpts }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
         <label style="grid-column:1/-1;display:flex;flex-direction:column;gap:4px;font-size:13px">เรื่อง<textarea rows="2" value="{{ form.subj }}" onChange="{{ fSubj }}" placeholder="เช่น ขออนุมัติเบิกจ่ายเงินค่ารักษาพยาบาลคืนผู้รับบริการ" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px;resize:vertical"></textarea></label>
         <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">วันที่ (วว/ดด/พ.ศ.)<input value="{{ form.date }}" onChange="{{ fDate }}" placeholder="29/10/2569" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"></label>
         <label style="display:{{ amtDisp }};flex-direction:column;gap:4px;font-size:13px">จำนวนเงิน (บาท)<input value="{{ form.amt }}" onChange="{{ fAmt }}" placeholder="0.00" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px;text-align:right"></label>
-        <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">{{ colWho }}<select value="{{ form.who }}" onChange="{{ fWho }}" style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"><sc-for list="{{ people }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+        <label style="display:flex;flex-direction:column;gap:4px;font-size:13px">{{ colWho }}<input list="{{ fl.who.list }}" value="{{ form.who }}" onChange="{{ fWho }}" placeholder="พิมพ์หรือเลือก" style="display:{{ fl.who.inp }};padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"><select value="{{ form.who }}" onChange="{{ fWho }}" style="display:{{ fl.who.sel }};padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"><sc-for list="{{ people }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
         <label style="display:{{ secDisp }};flex-direction:column;gap:4px;font-size:13px">ความเร่งด่วน / ชั้นความลับ<select style="padding:9px 12px;border:1px solid #CBD5E1;border-radius:8px"><option>ปกติ</option><option>ด่วน</option><option>ด่วนที่สุด</option><option>ลับ</option></select></label>
-        <div onClick="{{ attachFile }}" style="cursor:pointer;display:{{ attDisp }};grid-column:1/-1;border:1px dashed #CBD5E1;border-radius:8px;padding:12px;color:#64748B;font-size:13px">แนบไฟล์สแกน PDF · ลากวางที่นี่</div>
+        <label style="cursor:pointer;display:{{ attDisp }};flex-direction:column;gap:8px;grid-column:1/-1;border:1px dashed #CBD5E1;border-radius:8px;padding:12px;color:#64748B;font-size:13px"><input type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx" onChange="{{ pickFiles }}" style="display:none"><span>แนบไฟล์สแกน (PDF / รูป / เอกสาร) · คลิกเพื่อเลือกไฟล์ ไม่เกิน 10 MB ต่อไฟล์</span><sc-for list="{{ pendFiles }}" as="pf" hint-placeholder-count="1"><div style="display:flex;gap:8px;align-items:center;color:#334155"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis">{{ pf.name }} <span style="color:#94A3B8">{{ pf.size }}</span></span><button onClick="{{ pf.del }}" title="เอาไฟล์ออก" style="border:0;background:#F1F5F9;border-radius:6px;width:24px;height:24px;cursor:pointer">✕</button></div></sc-for></label>
       </div>
       <div style="padding:16px 24px;border-top:1px solid #E2E8F0;display:flex;gap:8px;justify-content:flex-end"><button onClick="{{ closeModal }}" style="padding:9px 16px;border:1px solid #CBD5E1;background:#fff;border-radius:8px;cursor:pointer">ยกเลิก</button><button onClick="{{ saveDoc }}" style="padding:9px 18px;border:0;background:var(--p);color:#fff;border-radius:8px;cursor:pointer;font-weight:500">บันทึกและออกเลข</button></div>
     </div>
@@ -445,6 +461,7 @@ const SETS = {
  num:['ชุดเลขรัน / ปี','กำหนดรูปแบบเลขที่หนังสือออก กบ. และเลขทะเบียนรับ'],
  type:['ประเภทเอกสาร','บันทึกข้อความ หนังสือภายนอก ประกาศ คำสั่ง หนังสือรับรอง'],
  org:['หน่วยงาน / รหัสหน่วย','โครงสร้างหน่วยงานและรหัสย่อที่ใช้ในเลขที่หนังสือ'],
+ fields:['ข้อมูลหลักและการกรอกข้อมูล','กำหนดว่าช่อง จาก / ถึง / ผู้ลงชื่อ ใช้ดรอปดาว พิมพ์เอง หรือทั้งสองอย่าง และให้ระบบจำค่าใหม่เป็นมาสเตอร์'],
  user:['ผู้ใช้และสิทธิ์','กำหนดบทบาท: ผู้ดูแลระบบ เจ้าหน้าที่สารบรรณ ผู้ตรวจ ผู้ลงนาม ผู้อ่าน'],
  flow:['ขั้นตอนอนุมัติ (Workflow)','กำหนดลำดับ ผู้รับผิดชอบ และกำหนดเวลา (SLA) ของแต่ละขั้น'],
  sec:['ความเร่งด่วนและชั้นความลับ','ระดับที่เลือกได้ตอนออกเลขหรือรับเข้า'],
@@ -463,17 +480,23 @@ const TBL = {
 class Component extends DCLogic {
   componentDidMount(){ try{const t=localStorage.getItem('thamc-theme');if(t&&THEMES.some(x=>x.id===t))this.setState({theme:t});}catch(e){}
     let d=null;try{d=JSON.parse(localStorage.getItem('thamc-db')||'null');}catch(e){}
-    this.setState(x=>({db:{...x.db,...(d&&d.url?{url:d.url}:{}),...(d&&d.token?{token:d.token}:{}),...(d&&typeof d.auto==='boolean'?{auto:d.auto}:{})}}),()=>{if(this.state.db.url)this.dbTest();});
-    fetch('data.json').then(r=>r.json()).then(d=>this.loadData(d)).catch(()=>this.setState({loading:false})); }
+    this.setState(x=>({db:{...x.db,...(d&&d.url?{url:d.url}:{}),...(d&&d.token?{token:d.token}:{}),...(d&&typeof d.auto==='boolean'?{auto:d.auto}:{})}}),()=>{if(this.state.db.url)this.dbBoot();});
+    try{const f=JSON.parse(localStorage.getItem('thamc-fm')||'null');if(f)this.setState(x=>({fm:{...x.fm,...f}}));}catch(e){}
+    this._dataP=fetch('data.json').then(r=>r.json()).then(d=>this.loadData(d)).catch(()=>this.setState({loading:false})); }
   loadData(d){
     const ym=n=>{const x=String(n).match(/(\d+)\/(\d+)/);if(!x)return null;let y=+x[2];if(y<100)y+=2500;return [y,+x[1]];};
     const nx=a=>a.reduce((m,r)=>{const k=ym(r[0]);if(k&&k[0]>=2560&&k[0]<=2575)m[k[0]]=Math.max(m[k[0]]||0,k[1]+1);return m;},{});
     const out=d.out.map((r,i)=>({id:'o'+i,kind:'out',no:r[0],date:r[1],a:r[2],b:r[3],subj:r[4],amt:r[5],who:r[6],st:r[7],cat:r[8],note:r[9]||'-'}));
     const inn=d.inn.map((r,i)=>({id:'i'+i,kind:'in',no:r[0],date:r[1],a:r[2],b:r[3],subj:r[4],amt:r[5],who:r[6],handler:r[7],st:r[8],ref:r[3],note:r[9]||'-'}));
+    const cntOf=a=>a.reduce((m,v)=>{v=(v||'').trim();if(v&&v!=='-')m[v]=(m[v]||0)+1;return m;},{});
+    const top=m=>Object.entries(m).filter(([k,v])=>v>=3).sort((a,b)=>b[1]-a[1]).map(([k])=>k);
+    const oTop=top(cntOf([...d.out.flatMap(r=>[r[2],r[3]]),...d.inn.map(r=>r[2])])),pTop=top(cntOf([...d.out.map(r=>r[6]),...d.inn.map(r=>r[6])]));
+    this._noSave=true;
+    this.setState(s=>({tbl:{...s.tbl,org:[...s.tbl.org,...oTop.filter(n=>!s.tbl.org.some(r=>r[0]===n)).map(n=>[n,'-','ภายใน','จัดการ'])],user:[...s.tbl.user,...pTop.filter(n=>!s.tbl.user.some(r=>r[0]===n)).map(n=>[n,'ผู้ใช้','การเงินและบัญชี','จัดการ'])]}}),()=>{this._noSave=false;});
     this.setState(s=>({out,inn,loading:false,cfg:{out:{...s.cfg.out,cnt:{...s.cfg.out.cnt,...nx(d.out)}},in:{...s.cfg.in,cnt:{...s.cfg.in.cnt,...nx(d.inn)}}}}));
     this.toast('นำเข้าข้อมูลแล้ว: หนังสือออก '+out.length.toLocaleString('th-TH')+' · หนังสือรับเข้า '+inn.length.toLocaleString('th-TH')+' รายการ');
   }
-  state = {db:{url:'https://script.google.com/macros/s/AKfycbysrAs5fndYBbdAkqAuUipU5zz3LkCm36UDM03GLbMK_dAva-S_HyfQgJWKG83nISY8/exec',token:'thamc-sarabun',auto:true,ok:false,sheets:null,msg:'ยังไม่ได้เชื่อมต่อ'},theme:'teal',themeOpen:false,adminOk:false,pinOpen:false,pinVal:'',pinErr:false,edit:false,ef:{},page:'dash',q:'',st:'all',dept:'ทั้งหมด',sel:null,modal:null,pres:false,setTab:'num',toast:'',out:[],inn:[],loading:true,form:{a:'ฝ่ายการเงินและบัญชี',b:'รอง ผอ.ฝ่ายบริหาร',subj:'',amt:'',who:'สาริณี'},cfg:{out:{prefix:'กบ ',digits:3,yfmt:'full',reset:'cal',cnt:{2568:123,2569:98}},in:{prefix:'กบ.',digits:2,yfmt:'short',reset:'cal',cnt:{2568:105,2569:99}}},tbl:Object.fromEntries(Object.entries(TBL).map(([k,v])=>[k,v[1].map(r=>[...r])])),tg:{},yrMode:'fy',yr:'all',pg:1,ps:10,feat:{flow:false,status:false,report:true,attach:true,amount:true,sec:false,check:true,notify:false,audit:true},setOn:{0:true,1:true,2:true,3:false}};
+  state = {db:{url:'https://script.google.com/macros/s/AKfycbysrAs5fndYBbdAkqAuUipU5zz3LkCm36UDM03GLbMK_dAva-S_HyfQgJWKG83nISY8/exec',token:'thamc-sarabun',auto:true,ok:false,sheets:null,msg:'ยังไม่ได้เชื่อมต่อ'},theme:'teal',themeOpen:false,sortK:'date',sortD:-1,fm:{a:{mode:'both',learn:true},b:{mode:'both',learn:true},who:{mode:'select',learn:false}},pf:[],closed:{},upMsg:'แนบไฟล์สแกนหนังสือ (PDF/รูป) · คลิกเพื่อเลือกไฟล์ ไม่เกิน 10 MB',adminOk:false,pinOpen:false,pinVal:'',pinErr:false,edit:false,ef:{},page:'dash',q:'',st:'all',dept:'ทั้งหมด',sel:null,modal:null,pres:false,setTab:'num',toast:'',out:[],inn:[],loading:true,form:{a:'ฝ่ายการเงินและบัญชี',b:'รอง ผอ.ฝ่ายบริหาร',subj:'',amt:'',who:'สาริณี'},cfg:{out:{prefix:'กบ ',digits:3,yfmt:'full',reset:'cal',cnt:{2568:123,2569:98}},in:{prefix:'กบ.',digits:2,yfmt:'short',reset:'cal',cnt:{2568:105,2569:99}}},tbl:Object.fromEntries(Object.entries(TBL).map(([k,v])=>[k,v[1].map(r=>[...r])])),tg:{},yrMode:'fy',yr:'all',pg:1,ps:10,feat:{flow:false,status:false,report:true,attach:true,amount:true,sec:false,check:true,notify:false,audit:true},setOn:{0:true,1:true,2:true,3:false}};
   set = o => this.setState(o);
   toast = m => { this.setState({toast:m}); setTimeout(()=>this.setState({toast:''}),2200); };
   copy = (t,m) => { const done=()=>this.toast(m); try{navigator.clipboard.writeText(t).then(done,()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();done();});}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();done();} };
@@ -487,15 +510,62 @@ class Component extends DCLogic {
   editCell = (T,i,k,v) => this.setState(x=>({tbl:{...x.tbl,[T]:x.tbl[T].map((r,j)=>j===i?r.map((c,q)=>q===k?v:c):r)}}));
   delRow = (T,i) => this.setState(x=>({tbl:{...x.tbl,[T]:x.tbl[T].filter((r,j)=>j!==i)}}));
   addRow = T => this.setState(x=>({tbl:{...x.tbl,[T]:[...x.tbl[T],['รายการใหม่','-','-','']]}}));
-  upd = (id,fn) => { this.setState(s=>({out:s.out.map(r=>r.id===id?fn(r):r),inn:s.inn.map(r=>r.id===id?fn(r):r)})); setTimeout(()=>this.dbPush(id),60); };
+  upd = (id,fn) => { const cur0=[...this.state.out,...this.state.inn].find(r=>r.id===id); if(cur0&&this.state.closed[this.fyOf(cur0.date)]){this.toast('ปีงบประมาณ '+this.fyOf(cur0.date)+' ถูกล็อกแล้ว แก้ไขไม่ได้');return;} this.setState(s=>({out:s.out.map(r=>r.id===id?fn(r):r),inn:s.inn.map(r=>r.id===id?fn(r):r)})); setTimeout(()=>this.dbPush(id),60); };
+  _files = [];
+  sz = n => n>1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
+  uploadFile = async (file,no,date) => {
+    if(file.size>10*1048576)throw new Error('ไฟล์เกิน 10 MB');
+    if(!this.state.db.url)return {name:file.name,url:URL.createObjectURL(file),size:file.size,local:true};
+    const data=await new Promise((ok,bad)=>{const fr=new FileReader();fr.onload=()=>ok(String(fr.result).split(',')[1]);fr.onerror=()=>bad(new Error('อ่านไฟล์ไม่ได้'));fr.readAsDataURL(file);});
+    const j=await this.dbCall({action:'upload',name:file.name,mime:file.type,data,no,fy:this.fyOf(date)});
+    return {name:file.name,url:j.url,size:file.size,id:j.id};
+  };
+  attachTo = async (id,no,date,files) => {
+    this.setState({upMsg:'กำลังอัปโหลด '+files.length+' ไฟล์…'});
+    const added=[];
+    for(const f of files){try{added.push(await this.uploadFile(f,no,date));}catch(e){this.toast('อัปโหลดไม่สำเร็จ: '+f.name+' ('+e.message+')');}}
+    const DEF='แนบไฟล์สแกนหนังสือ (PDF/รูป) · คลิกเพื่อเลือกไฟล์ ไม่เกิน 10 MB';
+    if(added.length){this.setState(x=>({upMsg:DEF,out:x.out.map(r=>r.id===id?{...r,files:[...(r.files||[]),...added]}:r),inn:x.inn.map(r=>r.id===id?{...r,files:[...(r.files||[]),...added]}:r)}));setTimeout(()=>this.dbPush(id),60);this.toast('แนบไฟล์แล้ว '+added.length+' ไฟล์'+(added.some(a=>a.local)?' (เก็บชั่วคราวในเบราว์เซอร์นี้)':''));}
+    else this.setState({upMsg:DEF});
+  };
+  delFile = (id,i) => {this.setState(x=>{const f=r=>r.id===id?{...r,files:(r.files||[]).filter((q,j)=>j!==i)}:r;return {out:x.out.map(f),inn:x.inn.map(f)};});setTimeout(()=>this.dbPush(id),60);};
+  pick = e => {const ok=[];[...e.target.files].forEach(f=>{if(f.size>10*1048576)this.toast('ไฟล์ '+f.name+' เกิน 10 MB');else ok.push(f);});e.target.value='';return ok;};
+  learn = v => {
+    const x=this.state,oSet=new Set([...x.tbl.org.map(r=>r[0]),...ORGS]),pSet=new Set([...x.tbl.user.map(r=>r[0]),...PEOPLE]),addO=[],addP=[];
+    const chk=(val,set,k,arr)=>{val=(val||'').trim();if(val&&val!=='-'&&x.fm[k].learn&&!set.has(val)&&!arr.includes(val))arr.push(val);};
+    chk(v.a,oSet,'a',addO);if(v.kind==='out')chk(v.b,oSet,'b',addO);chk(v.who,pSet,'who',addP);
+    if(!addO.length&&!addP.length)return;
+    this.setState(y=>({tbl:{...y.tbl,org:[...y.tbl.org,...addO.map(n=>[n,'-','ภายใน','จัดการ'])],user:[...y.tbl.user,...addP.map(n=>[n,'ผู้ใช้','การเงินและบัญชี','จัดการ'])]}}),()=>this.toast('เพิ่มเข้ามาสเตอร์: '+[...addO,...addP].join(', ')));
+  };
+  masterSave = () => {clearTimeout(this._mt);this._mt=setTimeout(()=>{const s=this.state;if(!s.db.url||!s.db.auto)return;this.dbCall({action:'master_set',orgs:s.tbl.org.map(r=>r[0]),people:s.tbl.user.map(r=>r[0]),fm:s.fm}).catch(()=>{});},900);};
+  componentDidUpdate(pp,ps){const a=this.state;if(this._noSave)return;if(ps.tbl.org!==a.tbl.org||ps.tbl.user!==a.tbl.user||ps.fm!==a.fm){this.masterSave();try{localStorage.setItem('thamc-fm',JSON.stringify(a.fm));}catch(e){}}}
+  applyRecs = (out,inn) => {
+    const ym=n=>{const x=String(n).match(/(\d+)\/(\d+)/);if(!x)return null;let y=+x[2];if(y<100)y+=2500;return [y,+x[1]];};
+    const nx=a=>a.reduce((m,r)=>{const k=ym(r.no);if(k&&k[0]>=2560&&k[0]<=2575)m[k[0]]=Math.max(m[k[0]]||0,k[1]+1);return m;},{});
+    this.setState(s=>({out,inn,cfg:{out:{...s.cfg.out,cnt:{...s.cfg.out.cnt,...nx(out)}},in:{...s.cfg.in,cnt:{...s.cfg.in.cnt,...nx(inn)}}}}));
+  };
+  dbBoot = async () => {
+    try{await this._dataP;await this.dbTest();if(!this.state.db.ok)return;
+      const m=await this.dbCall({action:'master_get'});
+      if(m.orgs.length||m.people.length||m.fm){this._noSave=true;this.setState(x=>({tbl:{...x.tbl,org:m.orgs.length?m.orgs.map(n=>x.tbl.org.find(r=>r[0]===n)||[n,'-','ภายใน','จัดการ']):x.tbl.org,user:m.people.length?m.people.map(n=>x.tbl.user.find(r=>r[0]===n)||[n,'ผู้ใช้','การเงินและบัญชี','จัดการ']):x.tbl.user},fm:m.fm?{...x.fm,...m.fm}:x.fm}),()=>{this._noSave=false;});}
+      else this.masterSave();
+      await this.dbPull(true);
+    }catch(e){this._noSave=false;}
+  };
+  printRec = c => {
+    if(!c)return;const w=window.open('','_blank');if(!w){this.toast('เบราว์เซอร์บล็อกหน้าต่างพิมพ์ กรุณาอนุญาตป๊อบอัพ');return;}
+    const out=c.kind==='out',rows=[['ประเภท',out?'หนังสือออก':'หนังสือรับเข้า'],['เลขที่',c.no],['วันที่',c.date],[out?'จาก':'จากหน่วยงาน',c.a],[out?'ถึง':'เลขหนังสือต้นทาง',c.b],['เรื่อง',c.subj],['จำนวนเงิน',c.amt?c.amt.toLocaleString('th-TH',{minimumFractionDigits:2})+' บาท':'-'],[out?'ผู้ลงชื่อ':'ผู้รับ',c.who],['หมายเหตุ',c.note||'-'],['ไฟล์แนบ',(c.files||[]).map(f=>f.name).join(', ')||'-']];
+    w.document.write('<!doctype html><meta charset="utf-8"><title>'+c.no+'</title><style>body{font-family:"IBM Plex Sans Thai",sans-serif;padding:32px;color:#0F172A}h2{margin:0 0 4px}table{border-collapse:collapse;width:100%;margin-top:16px}td{border:1px solid #CBD5E1;padding:8px 12px;vertical-align:top}td:first-child{width:160px;background:#F8FAFC;font-weight:600}</style><h2>ทะเบียน'+(out?'หนังสือออก':'หนังสือรับเข้า')+' '+c.no+'</h2><div>ฝ่ายการเงินและบัญชี ศูนย์การแพทย์ธรรมศาสตร์</div><table>'+rows.map(r=>'<tr><td>'+r[0]+'</td><td>'+String(r[1]).replace(/</g,'&lt;')+'</td></tr>').join('')+'</table>');
+    w.document.close();setTimeout(()=>w.print(),300);
+  };
   curFy = () => {const n=new Date(),y=n.getFullYear()+543;return n.getMonth()+1>=10?y+1:y;};
   dbSet = o => this.setState(x=>({db:{...x.db,...o}}),()=>{try{const d=this.state.db;localStorage.setItem('thamc-db',JSON.stringify({url:d.url,token:d.token,auto:d.auto}));}catch(e){}});
   dbCall = async p => {const d=this.state.db;if(!d.url)throw new Error('ยังไม่ได้ใส่ Web App URL');const r=await fetch(d.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({token:d.token,...p})});const j=await r.json();if(!j.ok)throw new Error(j.error||'ไม่สำเร็จ');return j;};
-  dbRec = r => ({id:r.id,kind:r.kind,no:r.no,date:r.date,a:r.a,b:r.b,subj:r.subj,amt:r.amt,who:r.who,handler:r.handler||'',st:r.st,cat:r.cat||'',note:r.note||'',edited:r.edited||''});
+  dbRec = r => ({id:r.id,kind:r.kind,no:r.no,date:r.date,a:r.a,b:r.b,subj:r.subj,amt:r.amt,who:r.who,handler:r.handler||'',st:r.st,cat:r.cat||'',note:r.note||'',edited:r.edited||'',files:JSON.stringify(r.files||[])});
   dbPush = id => {const s=this.state;if(!s.db.url||!s.db.auto)return;const r=[...s.out,...s.inn].find(x=>x.id===id);if(!r)return;this.dbCall({action:'upsert',rec:this.dbRec(r)}).then(()=>this.dbSet({msg:'ซิงก์ล่าสุด '+new Date().toLocaleTimeString('th-TH'),ok:true})).catch(e=>{this.dbSet({ok:false,msg:'ซิงก์ไม่สำเร็จ: '+e.message});this.toast('ซิงก์ชีทไม่สำเร็จ');});};
   dbTest = async () => {try{this.dbSet({msg:'กำลังเชื่อมต่อ…'});let r=await this.dbCall({action:'ping'});const fy=this.curFy();if(this.state.db.auto&&!r.sheets.includes('ออก FY'+fy)){r=await this.dbCall({action:'ensure',fy});this.toast('ขึ้นชีทปีงบประมาณ '+fy+' แล้ว');}this.dbSet({ok:true,sheets:r.sheets,msg:'เชื่อมต่อแล้ว · '+r.sheets.length+' ชีท'});}catch(e){this.dbSet({ok:false,msg:'เชื่อมต่อไม่ได้: '+e.message});}};
   dbBulk = async () => {try{const s=this.state,all=[...s.out,...s.inn].map(this.dbRec);for(let i=0;i<all.length;i+=400){this.dbSet({msg:'กำลังส่งข้อมูล '+Math.min(i+400,all.length)+'/'+all.length});await this.dbCall({action:'bulk',recs:all.slice(i,i+400)});}await this.dbTest();this.toast('ส่งข้อมูล '+all.length.toLocaleString('th-TH')+' รายการขึ้นชีทแล้ว');}catch(e){this.dbSet({ok:false,msg:'ส่งไม่สำเร็จ: '+e.message});}};
-  dbPull = async () => {try{this.dbSet({msg:'กำลังดึงข้อมูล…'});const j=await this.dbCall({action:'list'});const out=j.recs.filter(r=>r.kind==='out'),inn=j.recs.filter(r=>r.kind==='in');if(!j.recs.length){this.dbSet({msg:'ชีทยังไม่มีข้อมูล ให้กดส่งข้อมูลทั้งหมดก่อน'});return;}this.setState({out,inn});this.dbSet({ok:true,msg:'ดึงข้อมูลแล้ว '+j.recs.length.toLocaleString('th-TH')+' รายการ'});this.toast('ดึงข้อมูลจากชีทแล้ว');}catch(e){this.dbSet({ok:false,msg:'ดึงไม่สำเร็จ: '+e.message});}};
+  dbPull = async (silent) => {try{this.dbSet({msg:'กำลังดึงข้อมูล…'});const j=await this.dbCall({action:'list'});const fx=r=>{let f=[];try{f=JSON.parse(r.files||'[]');}catch(e){}return {...r,files:f,handler:r.handler||'',cat:r.cat||'',note:r.note||'-',edited:r.edited||''};};const out=j.recs.filter(r=>r.kind==='out').map(fx),inn=j.recs.filter(r=>r.kind==='in').map(fx);if(!j.recs.length){this.dbSet({ok:true,msg:'เชื่อมต่อแล้ว · ชีทยังไม่มีข้อมูล ให้กดส่งข้อมูลทั้งหมดก่อน'});return;}this.applyRecs(out,inn);this.dbSet({ok:true,msg:'ข้อมูลจากชีท '+j.recs.length.toLocaleString('th-TH')+' รายการ · '+new Date().toLocaleTimeString('th-TH')});if(!silent)this.toast('ดึงข้อมูลจากชีทแล้ว');}catch(e){this.dbSet({ok:false,msg:'ดึงไม่สำเร็จ: '+e.message});}};
   dbCopyCode = () => fetch('apps-script.gs').then(r=>r.text()).then(t=>this.copy(t,'คัดลอกโค้ด Apps Script แล้ว')).catch(()=>this.toast('คัดลอกไม่ได้'));
   cur(){ const s=this.state; return s.sel && [...s.out,...s.inn].find(r=>r.id===s.sel); }
   renderVals(){
@@ -525,7 +595,9 @@ class Component extends DCLogic {
     let src=isOut?fo:fi;
     const q=s.q.trim();
     let list=src.filter(r=>(s.st==='all'||r.st===s.st)&&(s.dept==='ทั้งหมด'||r.a===s.dept||r.b===s.dept)&&(!q||(r.no+r.subj+r.a+r.b+r.who).includes(q)));
-    const srt=list.map((r,i)=>[r,i]).sort((x,y)=>{const a=this.pd(x[0].date),b=this.pd(y[0].date);return (b.y*10000+b.m*100+b.d)-(a.y*10000+a.m*100+a.d)||y[1]-x[1];}).map(x=>x[0]);
+    const kv=(r,k)=>{if(k==='date'){const p=this.pd(r.date);return p.y*10000+p.m*100+p.d;}if(k==='no'){const m=String(r.no).match(/(\d+)\/(\d+)/);if(!m)return 0;let y=+m[2];if(y<100)y+=2500;return y*100000+(+m[1]);}if(k==='amt')return r.amt||0;if(k==='st')return ST[r.st][0];return String(r[k]||'');};
+    const sd=s.sortD,sk=s.sortK;
+    const srt=list.map((r,i)=>[r,i]).sort((x,y)=>{const A=kv(x[0],sk),B=kv(y[0],sk),c=typeof A==='number'?A-B:A.localeCompare(B,'th');return (c*sd)||(sd<0?y[1]-x[1]:x[1]-y[1]);}).map(x=>x[0]);
     const tot=srt.length,ps=Number(s.ps),pages=Math.max(1,Math.ceil(tot/ps)),pg=Math.min(s.pg,pages);
     const pw=[];for(let i=1;i<=pages;i++){if(i===1||i===pages||Math.abs(i-pg)<=1)pw.push(i);else if(pw[pw.length-1]!=='…')pw.push('…');}
     const pageBtns=pw.map(i=>({l:i,go:()=>i!=='…'&&this.set({pg:i}),bg:i===pg?'var(--p)':'#fff',fg:i===pg?'#fff':'#334155',bd:i===pg?'var(--p)':'#CBD5E1',cur:i==='…'?'default':'pointer'}));
@@ -540,7 +612,7 @@ class Component extends DCLogic {
     // detail
     const c=this.cur(); let d=null;
     if(c){const idx={draft:0,sign:1,return:0,wait:0,done:4,cancel:2}[c.st];const out=c.kind==='out';
-      d={no:c.no,subj:c.subj,note:c.note,whoLabel:out?'ผู้ลงชื่อ':'ผู้รับ',aLabel:out?'จาก':'จากหน่วยงาน',bLabel:out?'ถึง':'เลขหนังสือต้นทาง',advLabel:c.st==='done'?'ปิดเรื่อง / เก็บเข้าแฟ้ม':c.st==='sign'?'บันทึกลงนามแล้ว':'ส่งต่อขั้นถัดไป',
+      d={no:c.no,subj:c.subj,note:c.note,files:(c.files||[]).map((f,i)=>({name:f.name,url:f.url,size:this.sz(f.size||0),del:()=>this.delFile(c.id,i)})),whoLabel:out?'ผู้ลงชื่อ':'ผู้รับ',aLabel:out?'จาก':'จากหน่วยงาน',bLabel:out?'ถึง':'เลขหนังสือต้นทาง',advLabel:c.st==='done'?'ปิดเรื่อง / เก็บเข้าแฟ้ม':c.st==='sign'?'บันทึกลงนามแล้ว':'ส่งต่อขั้นถัดไป',
       fields:[{l:'ประเภท',v:out?'หนังสือออก':'หนังสือรับเข้า'},{l:'วันที่',v:c.date},{l:out?'จาก':'จากหน่วยงาน',v:c.a},{l:out?'ถึง':'เลขหนังสือต้นทาง',v:c.b},{l:'จำนวนเงิน',v:fm(c.amt)+(c.amt?' บาท':'')},{l:out?'ผู้ลงชื่อ':'ผู้รับ',v:c.who},...(out?[{l:'หมวดเรื่อง',v:c.cat}]:[{l:'ผู้ดำเนินการ',v:c.handler||'-'}]),{l:'สถานะ',v:ST[c.st][0]},...(c.edited?[{l:'แก้ไขล่าสุด',v:c.edited+' โดย สาริณี'}]:[])],
       steps:STEPS.map((l,i)=>{const done=c.st==='done'||i<idx,now=i===idx&&c.st!=='done'&&c.st!=='cancel';const bad=c.st==='return'&&i===0;return{l:bad?'ร่าง/ตรวจสอบ (ส่งคืนแก้ไข รอบที่ 1)':l,mark:done?'✓':bad?'↺':now?'●':'',bg:bad?'#F59E0B':done?'#10B981':now?'var(--p)':'#CBD5E1',fg:done||now||bad?'#0F172A':'#94A3B8',d:done?c.date:now?'อยู่ในขั้นตอนนี้ · '+c.who:bad?'วนกลับมาแก้ไขตามหมายเหตุ':'รอ'};})};}
     const form=s.form, nextNo=s.modal?this.nextOf(s.modal,s.form.date).no:'';
@@ -563,7 +635,15 @@ class Component extends DCLogic {
     return {
       th:THEMES.find(x=>x.id===s.theme)||THEMES[0],themeOpen:s.themeOpen,openTheme:()=>this.set({themeOpen:true}),closeTheme:()=>this.set({themeOpen:false}),
       themes:THEMES.map(t=>({...t,bd:t.id===s.theme?t.p:'#E2E8F0',go:()=>{try{localStorage.setItem('thamc-theme',t.id);}catch(e){}this.set({theme:t.id,themeOpen:false});this.toast('เปลี่ยนเป็นธีม '+t.name);}})),
-      chkItems,chkSub,loading:s.loading,s_db:T==='db',
+      chkItems,chkSub,loading:s.loading,s_db:T==='db',s_fields:T==='fields',emptyMsg:s.loading?'กำลังโหลดข้อมูล…':'ไม่พบรายการตามเงื่อนไข',
+      hd:Object.fromEntries(['no','date','a','b','subj','amt','who','st'].map(k=>[k,{go:()=>this.set({sortK:k,sortD:s.sortK===k?-s.sortD:(k==='date'||k==='amt'||k==='no'?-1:1),pg:1}),ar:s.sortK===k?(s.sortD>0?'▲':'▼'):'↕',op:s.sortK===k?1:.35}])),
+      fl:(()=>{const f=(k,l)=>{const m=s.fm[k].mode;return {sel:m==='select'?'block':'none',inp:m==='select'?'none':'block',list:m==='both'?l:''};};return {a:f('a','dl-org'),b:f('b','dl-org'),who:f('who','dl-ppl')};})(),
+      fmCards:[['a','จาก / หน่วยงานต้นเรื่อง','ช่องแรกในฟอร์มออกเลขและรับหนังสือ',ORGL.length],['b','ถึง','ปลายทางของหนังสือออก (ใช้มาสเตอร์หน่วยงานเดียวกัน)',ORGL.length],['who','ผู้ลงชื่อ / ผู้รับ','ผู้ที่ลงชื่อหรือรับหนังสือ (มาสเตอร์ผู้ใช้)',PPL.length]].map(([k,title,sub,count])=>({title,sub,count:count.toLocaleString('th-TH'),mode:s.fm[k].mode,setMode:e=>this.setState(x=>({fm:{...x.fm,[k]:{...x.fm[k],mode:e.target.value}}})),bg:s.fm[k].learn?'var(--p)':'#CBD5E1',side:s.fm[k].learn?'right':'left',togLearn:()=>this.setState(x=>({fm:{...x.fm,[k]:{...x.fm[k],learn:!x.fm[k].learn}}}))})),
+      pendFiles:s.pf.map((p,i)=>({name:p.n,size:this.sz(p.s),del:ev=>{if(ev){ev.preventDefault();ev.stopPropagation();}this._files.splice(i,1);this.setState({pf:this._files.map(f=>({n:f.name,s:f.size}))});}})),
+      pickFiles:e=>{const ok=this.pick(e);this._files.push(...ok);this.setState({pf:this._files.map(f=>({n:f.name,s:f.size}))});},
+      pickDrawer:e=>{const ok=this.pick(e);if(ok.length&&c)this.attachTo(c.id,c.no,c.date,ok);},upMsg:s.upMsg,
+      closeLabel:s.closed[this.curFy()-1]?'เปิดปีงบฯ '+(this.curFy()-1)+' อีกครั้ง':'ปิดปีงบฯ '+(this.curFy()-1),
+      closeNote:s.closed[this.curFy()-1]?'ปีงบฯ '+(this.curFy()-1)+' ถูกล็อกแล้ว ไม่สามารถออกเลข แก้ไข หรือยกเลิกรายการในปีนี้':'ปิดปีงบฯ '+(this.curFy()-1)+': ล็อกไม่ให้ออกเลข แก้ไข หรือยกเลิกรายการ (เปิดกลับได้)',
       dbUrl:s.db.url,dbToken:s.db.token,dbMsg:s.db.msg,dbDot:s.db.ok?'#10B981':'#94A3B8',dbAutoBg:s.db.auto?'var(--p)':'#CBD5E1',dbAutoSide:s.db.auto?'right':'left',
       setDbUrl:e=>this.dbSet({url:e.target.value.trim()}),setDbToken:e=>this.dbSet({token:e.target.value}),togDbAuto:()=>this.dbSet({auto:!s.db.auto}),
       dbTest:()=>this.dbTest(),dbBulk:()=>this.dbBulk(),dbPull:()=>this.dbPull(),dbCopyCode:()=>this.dbCopyCode(),
@@ -571,12 +651,22 @@ class Component extends DCLogic {
       yrShow:(p==='set'||p==='admin')?'none':'flex',yrOpts,yr:s.yr,setYr:e=>this.set({yr:e.target.value,pg:1}),modeFy:()=>this.set({yrMode:'fy',yr:'all',pg:1}),modeCal:()=>this.set({yrMode:'cal',yr:'all',pg:1}),fyBg:s.yrMode==='fy'?'var(--p)':'#fff',fyFg:s.yrMode==='fy'?'#fff':'#334155',calBg:s.yrMode==='cal'?'var(--p)':'#fff',calFg:s.yrMode==='cal'?'#fff':'#334155',
       pageBtns,ps:String(s.ps),setPs:e=>this.set({ps:Number(e.target.value),pg:1}),pgFrom:tot?(pg-1)*ps+1:0,pgTo:Math.min(tot,pg*ps),prevPg:()=>this.set({pg:Math.max(1,pg-1)}),nextPg:()=>this.set({pg:Math.min(pages,pg+1)}),prevOp:pg<=1?.4:1,nextOp:pg>=pages?.4:1,
       exportCsv:()=>this.csv([hdr,...srt.map(rw)],(isOut?'ทะเบียนหนังสือออก':'ทะเบียนหนังสือรับเข้า')+'.csv'),
-      cfgCards,attachFile:()=>this.toast('ตัวอย่าง: ระบบจริงจะเปิดหน้าต่างเลือกไฟล์ PDF'),printReg:()=>{this.toast('เปิดหน้าพิมพ์');setTimeout(()=>window.print(),300);},
-      ioImport:()=>this.toast('ตัวอย่าง: เลือกไฟล์หรือลิงก์ Google Sheets เพื่อนำเข้า'),ioBackup:()=>{this.log('สำรองข้อมูล','สำรองทันที');this.toast('สำรองข้อมูลแล้ว');},ioClose:()=>{this.log('ปิดปี','ล็อกเลขรันปี 2568');this.toast('ล็อกเลขรันปี 2568 แล้ว');},
+      cfgCards,printReg:()=>this.printRec(c),
+      ioImport:e=>{const f=e.target.files[0];e.target.value='';if(!f)return;const rd=new FileReader();rd.onload=()=>{
+        const rows=[];let cur=[],v='',q=false,t=String(rd.result).replace(/^\uFEFF/,'');
+        for(let i=0;i<t.length;i++){const ch=t[i];if(q){if(ch==='"'&&t[i+1]==='"'){v+='"';i++;}else if(ch==='"')q=false;else v+=ch;}else if(ch==='"')q=true;else if(ch===','){cur.push(v);v='';}else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&t[i+1]==='\n')i++;cur.push(v);v='';if(cur.some(x=>x))rows.push(cur);cur=[];}else v+=ch;}
+        if(v||cur.length){cur.push(v);rows.push(cur);}
+        const body=rows.slice(1),isIn=p==='in',exist=new Set((isIn?s.inn:s.out).map(r=>r.no)),stRev=Object.fromEntries(Object.entries(ST).map(([k,x])=>[x[0],k]));
+        const recs=body.filter(r=>r[0]&&r[4]&&/^\d+\/\d+\/\d+$/.test(r[1]||'')&&!exist.has(r[0])).map((r,i)=>({id:(isIn?'i':'o')+'imp'+Date.now()+i,kind:isIn?'in':'out',no:r[0],date:r[1],a:r[2],b:r[3],subj:r[4],amt:parseFloat(String(r[5]).replace(/,/g,''))||0,who:r[6],handler:'',st:stRev[r[7]]||'done',cat:'อื่นๆ',note:'-',ref:r[3]}));
+        if(!recs.length){this.toast('ไม่พบรายการใหม่ในไฟล์ (หัวคอลัมน์ต้องตรงกับไฟล์ที่ส่งออก หรือเลขที่ซ้ำทั้งหมด)');return;}
+        this.applyRecs(isIn?s.out:[...recs,...s.out],isIn?[...recs,...s.inn]:s.inn);this.log('นำเข้า CSV',recs.length+' รายการ ('+(isIn?'รับเข้า':'ออก')+')');
+        recs.forEach(r=>setTimeout(()=>this.dbPush(r.id),200));this.toast('นำเข้า '+recs.length+' รายการเข้า'+(isIn?'ทะเบียนรับเข้า':'ทะเบียนหนังสือออก'));};rd.readAsText(f,'utf-8');},
+      ioBackup:()=>{const b=new Blob([JSON.stringify({exported:new Date().toISOString(),out:s.out,inn:s.inn,cfg:s.cfg,tbl:s.tbl},null,1)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='สำรองสารบรรณ-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),500);this.log('สำรองข้อมูล','ดาวน์โหลด JSON');this.toast('ดาวน์โหลดไฟล์สำรองแล้ว');},
+      ioClose:()=>{const fy=this.curFy()-1,on=!s.closed[fy];this.setState(x=>({closed:{...x.closed,[fy]:on}}));this.log(on?'ปิดปีงบประมาณ':'เปิดปีงบประมาณ','FY'+fy);this.toast((on?'ล็อกปีงบฯ ':'เปิดปีงบฯ ')+fy+(on?' แล้ว':' อีกครั้ง'));},
       mFrom:s.modal==='in'?'หน่วยงานต้นเรื่อง':'จาก',mTo:s.modal==='in'?'เลขหนังสือต้นทาง':'ถึง',mSel:s.modal==='in'?'none':'flex',mTxt:s.modal==='in'?'flex':'none',fDate:e=>this.set({form:{...s.form,date:e.target.value}}),
       nav,adminGroups,isAdmin:p==='admin'&&s.adminOk,stDisp:D(F.status),stCell:CD(F.status),amtCell:CD(F.amount),amtDisp:D(F.amount),attDisp:D(F.attach),secDisp:D(F.sec),chkDisp:D(F.check),title:titles[p],sideW:s.pres?'0px':'232px',chromeDisplay:s.pres?'none':'flex',presMode:s.pres,togglePres:()=>this.set({pres:!s.pres}),
       q:s.q,setQ:e=>this.set({pg:1,q:e.target.value,page:(p==='dash'||p==='report'||p==='set'||p==='flow')?'out':p}),
-      openOut:()=>this.set({modal:'out',form:{a:'ฝ่ายการเงินและบัญชี',b:'รอง ผอ.ฝ่ายบริหาร',subj:'',amt:'',who:'สาริณี',date:'29/10/2569'}}),openIn:()=>this.set({modal:'in',form:{a:'สนับสนุนทั่วไป',b:'',subj:'',amt:'',who:'สาริณี',date:'29/10/2569'}}),
+      openOut:()=>this.set({pf:(this._files=[],[]),modal:'out',form:{a:'ฝ่ายการเงินและบัญชี',b:'รอง ผอ.ฝ่ายบริหาร',subj:'',amt:'',who:'สาริณี',date:'29/10/2569'}}),openIn:()=>this.set({pf:(this._files=[],[]),modal:'in',form:{a:'สนับสนุนทั่วไป',b:'',subj:'',amt:'',who:'สาริณี',date:'29/10/2569'}}),
       isDash:p==='dash',isList:isOut||isIn,isFlow:p==='flow',isReport:p==='report',isSet:p==='set',
       kpis,catBars:bars(tally(fo,'cat')),orgBars:bars(tally(fi,'a')),followUps,
       chips,deptOpts,dept:s.dept,setDept:e=>this.set({dept:e.target.value,pg:1}),rows,noRows:tot===0,rowCount:tot,colFrom:isIn?'หน่วยงานต้นเรื่อง':'จาก',colTo:isIn?'เลขหนังสือต้นทาง':'ถึง',colWho:s.modal==='in'?'ผู้รับ':'ผู้ลงชื่อ',board,
@@ -596,10 +686,10 @@ class Component extends DCLogic {
       editFlex:s.edit?'flex':'none',viewFlex:s.edit?'none':'flex',
       peopleE:[...new Set([s.ef.who,...PPL].filter(Boolean))],orgOptsA:[...new Set([s.ef.a,...ORGL].filter(Boolean))],orgOptsB:[...new Set([s.ef.b,...ORGL].filter(Boolean))],bSel:(c&&c.kind==='out')?'flex':'none',bTxt:(c&&c.kind==='out')?'none':'flex',
       editDisp:s.edit?'grid':'none',viewDisp:s.edit?'none':'grid',viewBlock:s.edit?'none':'block',advDisp:(s.edit||!F.status)?'none':'flex',ef:s.ef,
-      startEdit:()=>this.set({edit:true,ef:{date:c.date,a:c.a,b:c.b,subj:c.subj,amt:c.amt?String(c.amt):'',who:c.who,note:c.note==='-'?'':c.note}}),
+      startEdit:()=>s.closed[this.fyOf(c.date)]?this.toast('ปีงบประมาณ '+this.fyOf(c.date)+' ถูกล็อกแล้ว แก้ไขไม่ได้'):this.set({edit:true,ef:{date:c.date,a:c.a,b:c.b,subj:c.subj,amt:c.amt?String(c.amt):'',who:c.who,note:c.note==='-'?'':c.note}}),
       cancelEdit:()=>this.set({edit:false}),
       eDate:e=>this.set({ef:{...s.ef,date:e.target.value}}),eWho:e=>this.set({ef:{...s.ef,who:e.target.value}}),eA:e=>this.set({ef:{...s.ef,a:e.target.value}}),eB:e=>this.set({ef:{...s.ef,b:e.target.value}}),eSubj:e=>this.set({ef:{...s.ef,subj:e.target.value}}),eAmt:e=>this.set({ef:{...s.ef,amt:e.target.value}}),eNote:e=>this.set({ef:{...s.ef,note:e.target.value}}),
-      saveEdit:()=>{const f=s.ef,amt=parseFloat((f.amt||'0').replace(/,/g,''))||0;this.upd(c.id,r=>({...r,date:f.date,a:f.a,b:f.b,subj:f.subj||r.subj,amt,who:f.who,note:f.note||'-',edited:'29/10/2569'}));this.set({edit:false});this.log('แก้ไข',c.no);this.toast('บันทึกการแก้ไข '+c.no+' แล้ว');},
+      saveEdit:()=>{const f=s.ef,amt=parseFloat((f.amt||'0').replace(/,/g,''))||0;this.upd(c.id,r=>({...r,date:f.date,a:f.a,b:f.b,subj:f.subj||r.subj,amt,who:f.who,note:f.note||'-',edited:'29/10/2569'}));this.set({edit:false});this.log('แก้ไข',c.no);this.learn({kind:c.kind,a:f.a,b:f.b,who:f.who});this.toast('บันทึกการแก้ไข '+c.no+' แล้ว');},
       copyNo:()=>this.copy(c.no,'คัดลอกเลขที่แล้ว: '+c.no),copySubj:()=>this.copy(c.subj,'คัดลอกชื่อเรื่องแล้ว'),
       sel:!!c,d,closeSel:()=>this.set({sel:null,edit:false}),
       advance:()=>{const nx={draft:'sign',sign:'done',return:'sign',wait:'draft',done:'done'}[c.st];this.upd(c.id,r=>({...r,st:nx}));this.set({sel:null});this.log('ส่งต่อ',c.no+' → '+ST[nx][0]);this.toast('บันทึกแล้ว: '+c.no+' → '+ST[nx][0]);},
@@ -611,12 +701,14 @@ class Component extends DCLogic {
       saveDoc:()=>{const f=s.form,m=s.modal;
         if(!(f.subj||'').trim()){this.toast('กรุณาระบุเรื่อง');return;}
         if(!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(f.date||'')){this.toast('รูปแบบวันที่ต้องเป็น วว/ดด/พ.ศ. เช่น 29/10/2569');return;}
+        if(s.closed[this.fyOf(f.date)]){this.toast('ปีงบประมาณ '+this.fyOf(f.date)+' ถูกล็อกแล้ว ออกเลขไม่ได้');return;}
         const amt=parseFloat((f.amt||'0').replace(/,/g,''))||0,nx=this.nextOf(m,f.date),nid=(m==='out'?'o':'i')+Date.now();
         const base={subj:f.subj.trim(),amt,who:f.who,date:f.date,a:f.a,b:f.b||'-',st:'draft',note:'-'};
         const cfg={...s.cfg,[m]:{...s.cfg[m],cnt:{...s.cfg[m].cnt,[nx.yk]:nx.n+1}}};
         if(m==='out')this.set({out:[{...base,id:nid,kind:'out',no:nx.no,cat:'อื่นๆ'},...s.out],cfg,modal:null,page:'out',st:'all',pg:1,yr:'all'});
         else this.set({inn:[{...base,id:nid,kind:'in',no:nx.no,ref:base.b,handler:''},...s.inn],cfg,modal:null,page:'in',st:'all',pg:1,yr:'all'});
-        this.log(m==='out'?'ออกเลข':'รับเข้า',nx.no);setTimeout(()=>this.dbPush(nid),60);this.toast('บันทึกแล้ว ได้เลขที่ '+nx.no);},
+        this.log(m==='out'?'ออกเลข':'รับเข้า',nx.no);setTimeout(()=>this.dbPush(nid),60);
+        const pend=this._files.slice();this._files=[];this.setState({pf:[]});this.learn({kind:m,a:f.a,b:f.b,who:f.who});if(pend.length)this.attachTo(nid,nx.no,f.date,pend);this.toast('บันทึกแล้ว ได้เลขที่ '+nx.no);},
       toast:s.toast
     };
   }
